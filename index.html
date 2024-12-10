@@ -1,22 +1,17 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>US Map Visualization</title>
   <script src="https://d3js.org/d3.v7.min.js"></script>
   <script src="https://unpkg.com/topojson-client"></script>
   <style>
     .state {
       stroke: #ffffff;
-      stroke-width: 1px; /* Set a uniform stroke width */
+      stroke-width: 1px;
       fill: #ccc;
       transition: stroke 0.2s, fill 0.2s;
-    }
-
-    .state:hover {
-      stroke: black; /* Highlighted stroke color */
-      stroke-width: 2px; /* Highlighted stroke width */
     }
 
     .tooltip {
@@ -100,17 +95,31 @@
             const alcoholInfo = alcoholData.find(
               record => record.state.toLowerCase() === stateName.toLowerCase() && record.year === selectedYear
             );
-            d3.select(event.target).style("stroke", "black").style("stroke-width", "2px");
-            tooltip.style("visibility", "visible").html(`
-              <strong>${stateName}</strong><br>
-              ${selectedType}: ${alcoholInfo ? alcoholInfo[selectedType] : "No data"}
-            `);
+
+            // Bring hovered state to front
+            d3.select(event.currentTarget).raise();
+
+            d3.select(event.currentTarget)
+              .style("stroke", "black")
+              .style("stroke-width", "3px");
+
+            tooltip
+              .style("visibility", "visible")
+              .html(`
+                <strong>${stateName}</strong><br>
+                ${selectedType}: ${alcoholInfo ? alcoholInfo[selectedType] : "No data"}
+              `);
           })
           .on("mousemove", event => {
-            tooltip.style("top", (event.pageY + 10) + "px").style("left", (event.pageX + 10) + "px");
+            tooltip
+              .style("top", (event.pageY + 10) + "px")
+              .style("left", (event.pageX + 10) + "px");
           })
           .on("mouseout", event => {
-            d3.select(event.target).style("stroke", "#ffffff").style("stroke-width", "1px"); // Reset to default
+            d3.select(event.currentTarget)
+              .style("stroke", "#ffffff")
+              .style("stroke-width", "1px");
+
             tooltip.style("visibility", "hidden");
           });
       };
