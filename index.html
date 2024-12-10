@@ -33,10 +33,13 @@
     <option value="number_of_glasses_wine">Wine Consumption</option>
     <option value="number_of_shots_liquor">Spirits Consumption</option>
   </select>
+
   <label for="yearSlider">Select Year:</label>
   <input type="range" id="yearSlider" min="1977" max="2018" step="1" value="2018">
   <span id="yearLabel">2018</span>
+
   <svg id="choropleth" width="960" height="600"></svg>
+
   <script>
     const width = 960, height = 600;
     const svg = d3.select("#choropleth");
@@ -75,11 +78,11 @@
         // Get unemployment values for color mapping
         const unemploymentByState = Object.fromEntries(
           unemploymentData
-            .filter(d => d.Year === selectedYear)
-            .map(d => [d.State, d["Unemployed - Percent of Labor Force"]])
+            .filter(d => d.year === selectedYear)
+            .map(d => [d.state.toLowerCase(), d["Unemployed - Percent of Labor Force"]])
         );
 
-        unemploymentColorScale.domain(d3.extent(Object.values(unemploymentByState)));
+        unemploymentColorScale.domain([0, 15]); // Set a consistent domain
 
         svg.selectAll(".state")
           .data(states)
@@ -88,18 +91,27 @@
           .attr("d", path)
           .style("fill", d => {
             const stateName = stateIdToName[d.id];
-            return stateName in unemploymentByState ? unemploymentColorScale(unemploymentByState[stateName]) : "#ccc";
+            if (!stateName) {
+              console.warn(`State ID ${d.id} does not have a mapped name.`);
+              return "#ccc"; 
+            }
+            return stateName.toLowerCase() in unemploymentByState
+              ? unemploymentColorScale(unemploymentByState[stateName.toLowerCase()])
+              : "#ccc";
           })
           .on("mouseover", (event, d) => {
             const stateName = stateIdToName[d.id];
+            if (!stateName) {
+              console.warn(`State ID ${d.id} does not have a mapped name.`);
+              return;
+            }
+
             const alcoholInfo = alcoholData.find(
               record => record.state.toLowerCase() === stateName.toLowerCase() && record.year === selectedYear
             );
 
-            // Bring hovered state to front
-            d3.select(event.currentTarget).raise();
-
             d3.select(event.currentTarget)
+              .raise()  // Bring the hovered state to the front
               .style("stroke", "black")
               .style("stroke-width", "3px");
 
