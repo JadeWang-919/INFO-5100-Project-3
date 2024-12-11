@@ -3,157 +3,33 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>US Map Visualization</title>
+  <title>alcohol vs unemployment</title>
   <script src="https://d3js.org/d3.v7.min.js"></script>
   <script src="https://unpkg.com/topojson-client"></script>
-  <style>
-    .state {
-      stroke: #ffffff;
-      stroke-width: 1px;
-      fill: #ccc;
-      transition: stroke 0.2s, fill 0.2s;
-    }
-
-    .tooltip {
-      position: absolute;
-      background-color: rgba(0, 0, 0, 0.7);
-      color: white;
-      padding: 5px;
-      border-radius: 5px;
-      pointer-events: none;
-      font-size: 12px;
-    }
-  </style>
+  <link rel="stylesheet" href="Arthur.css">
 </head>
 <body>
-  <h1>US Map Visualization</h1>
+  <h1>Alcohol Consumption and Unemployment in the U.S.</h1>
   <label for="dataType">Select Alcohol Consumption:</label>
   <select id="dataType">
-    <option value="number_of_beers">Beer Consumption</option>
-    <option value="number_of_glasses_wine">Wine Consumption</option>
-    <option value="number_of_shots_liquor">Spirits Consumption</option>
+    <option value="ethanol_beer_gallons_per_capita">Beer Consumption</option>
+    <option value="ethanol_wine_gallons_per_capita">Wine Consumption</option>
+    <option value="ethanol_spirit_gallons_per_capita">Spirit Consumption</option>
   </select>
 
   <label for="yearSlider">Select Year:</label>
   <input type="range" id="yearSlider" min="1977" max="2018" step="1" value="2018">
   <span id="yearLabel">2018</span>
 
-  <svg id="choropleth" width="960" height="600"></svg>
+  <div style="display: flex; align-items: start;">
+    <!-- US Map -->
+    <svg id="choropleth" width="960" height="600"></svg>
+    <!-- Legend Container -->
+    <div id="legendContainer" style="margin-left: 20px;">
+      <svg id="legendSvg" width="300" height="400"></svg>
+    </div>
+  </div>
 
-  <script>
-    const width = 960, height = 600;
-    const svg = d3.select("#choropleth");
-    const tooltip = d3.select("body").append("div").attr("class", "tooltip").style("visibility", "hidden");
-
-    const loadAndVisualizeData = async () => {
-      const topoData = await d3.json("us-smaller.json");
-      const alcoholData = await d3.csv("alcohol_consumption_1977_2018.csv", d3.autoType);
-      const unemploymentData = await d3.csv("unemployment_by_state_1976_2018.csv", d3.autoType);
-
-      // Map TopoJSON IDs to state names
-      const stateIdToName = {
-        1: "Alabama", 2: "Alaska", 4: "Arizona", 5: "Arkansas", 6: "California",
-        8: "Colorado", 9: "Connecticut", 10: "Delaware", 11: "District of Columbia",
-        12: "Florida", 13: "Georgia", 15: "Hawaii", 16: "Idaho", 17: "Illinois",
-        18: "Indiana", 19: "Iowa", 20: "Kansas", 21: "Kentucky", 22: "Louisiana",
-        23: "Maine", 24: "Maryland", 25: "Massachusetts", 26: "Michigan", 27: "Minnesota",
-        28: "Mississippi", 29: "Missouri", 30: "Montana", 31: "Nebraska", 32: "Nevada",
-        33: "New Hampshire", 34: "New Jersey", 35: "New Mexico", 36: "New York",
-        37: "North Carolina", 38: "North Dakota", 39: "Ohio", 40: "Oklahoma",
-        41: "Oregon", 42: "Pennsylvania", 44: "Rhode Island", 45: "South Carolina",
-        46: "South Dakota", 47: "Tennessee", 48: "Texas", 49: "Utah", 50: "Vermont",
-        51: "Virginia", 53: "Washington", 54: "West Virginia", 55: "Wisconsin", 56: "Wyoming"
-      };
-
-      const projection = d3.geoAlbersUsa().fitSize([width, height], topojson.feature(topoData, topoData.objects.states));
-      const path = d3.geoPath().projection(projection);
-
-      const states = topojson.feature(topoData, topoData.objects.states).features;
-
-      // Create a color scale
-      const unemploymentColorScale = d3.scaleSequential(d3.interpolateBlues);
-
-      // Update map visualization
-      const updateMap = (selectedYear, selectedType) => {
-        // Get unemployment values for color mapping
-        const unemploymentByState = Object.fromEntries(
-          unemploymentData
-            .filter(d => d.year === selectedYear)
-            .map(d => [d.state.toLowerCase(), d["Unemployed - Percent of Labor Force"]])
-        );
-
-        unemploymentColorScale.domain([0, 15]); // Set a consistent domain
-
-        svg.selectAll(".state")
-          .data(states)
-          .join("path")
-          .attr("class", "state")
-          .attr("d", path)
-          .style("fill", d => {
-            const stateName = stateIdToName[d.id];
-            if (!stateName) {
-              console.warn(`State ID ${d.id} does not have a mapped name.`);
-              return "#ccc"; 
-            }
-            return stateName.toLowerCase() in unemploymentByState
-              ? unemploymentColorScale(unemploymentByState[stateName.toLowerCase()])
-              : "#ccc";
-          })
-          .on("mouseover", (event, d) => {
-            const stateName = stateIdToName[d.id];
-            if (!stateName) {
-              console.warn(`State ID ${d.id} does not have a mapped name.`);
-              return;
-            }
-
-            const alcoholInfo = alcoholData.find(
-              record => record.state.toLowerCase() === stateName.toLowerCase() && record.year === selectedYear
-            );
-
-            d3.select(event.currentTarget)
-              .raise()  // Bring the hovered state to the front
-              .style("stroke", "black")
-              .style("stroke-width", "3px");
-
-            tooltip
-              .style("visibility", "visible")
-              .html(`
-                <strong>${stateName}</strong><br>
-                ${selectedType}: ${alcoholInfo ? alcoholInfo[selectedType] : "No data"}
-              `);
-          })
-          .on("mousemove", event => {
-            tooltip
-              .style("top", (event.pageY + 10) + "px")
-              .style("left", (event.pageX + 10) + "px");
-          })
-          .on("mouseout", event => {
-            d3.select(event.currentTarget)
-              .style("stroke", "#ffffff")
-              .style("stroke-width", "1px");
-
-            tooltip.style("visibility", "hidden");
-          });
-      };
-
-      // Initial map rendering
-      const yearSlider = d3.select("#yearSlider");
-      const dataTypeDropdown = d3.select("#dataType");
-      const yearLabel = d3.select("#yearLabel");
-
-      yearSlider.on("input", function () {
-        yearLabel.text(this.value);
-        updateMap(+this.value, dataTypeDropdown.property("value"));
-      });
-
-      dataTypeDropdown.on("change", function () {
-        updateMap(+yearSlider.property("value"), this.value);
-      });
-
-      updateMap(+yearSlider.property("value"), dataTypeDropdown.property("value"));
-    };
-
-    loadAndVisualizeData();
-  </script>
+  <script src="Arthur.js"></script>
 </body>
 </html>

@@ -1,0 +1,26 @@
+.arthur-state {
+    stroke: #ffffff;
+    stroke-width: 1px;
+    fill: #ccc;
+    transition: stroke 0.2s, fill 0.2s;
+  }
+  
+  .arthur-tooltip {
+    position: absolute;
+    background-color: rgba(0, 0, 0, 0.7);
+    color: white;
+    padding: 5px;
+    border-radius: 5px;
+    pointer-events: none;
+    font-size: 12px;
+  }
+  
+  .arthur-legend {
+    font-size: 12px;
+  }
+  
+  .arthur-legend-title {
+    font-size: 14px;
+    font-weight: bold;
+  }
+  
