@@ -1,7 +1,7 @@
 import pandas as pd
 
 # File paths
-input_file = "disney_movies.csv"
+input_file = "disney_movies_original.csv"
 output_file = "disney_modified.csv"
 
 # Load the data

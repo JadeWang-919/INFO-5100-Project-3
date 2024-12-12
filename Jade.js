@@ -64,7 +64,9 @@ async function drawGraph() {
     }, []);
   }
 
-  const aggregatedData = Object.values(aggregateUnemployment(unemployData));
+  const aggregatedData = Object.values(
+    aggregateUnemployment(unemployData)
+  ).filter((d) => d.year <= 2016);
 
   let annotations = svg.append("g").attr("id", "annotations");
   let chartArea = svg
@@ -74,8 +76,8 @@ async function drawGraph() {
 
   const xScale = d3
     .scaleLinear()
-    .domain(d3.extent(aggregatedData, (d) => d["year"]))
-    .range([20, chartWidth]);
+    .domain([1976, 2016])
+    .range([10, chartWidth - 10]);
 
   const yScale = d3
     .scaleLog()
@@ -89,7 +91,7 @@ async function drawGraph() {
   const radiusScale = d3
     .scaleLinear()
     .domain([0, maxMovies]) // Adjust this range
-    .range([5, 10]); // Minimum and maximum radius for circles
+    .range([4, 12]); // Minimum and maximum radius for circles
 
   // Axes & Gridlines
   let xAxis = d3.axisBottom(xScale).tickFormat(d3.format("d"));
@@ -117,7 +119,10 @@ async function drawGraph() {
     .text("Year");
 
   let yAxis = d3.axisLeft(yScale);
-  let yGridlines = d3.axisLeft(yScale).tickSize(-chartWidth).tickFormat("");
+  let yGridlines = d3
+    .axisLeft(yScale)
+    .tickSize(-chartWidth + 10)
+    .tickFormat("");
   annotations
     .append("g")
     .attr("class", "y axis")
@@ -184,8 +189,6 @@ async function drawGraph() {
         .y((d) => new_yScale(d.UnemployedTotal))
         .curve(d3.curveMonotoneX)(aggregatedData)
     );
-
-    console.log("Zoomed");
   }
 
   // Reset zoom
@@ -201,9 +204,9 @@ async function drawGraph() {
     .attr("id", "clip")
     .append("rect")
     .attr("width", chartWidth)
-    .attr("height", chartHeight - 20)
+    .attr("height", chartHeight - 10)
     .attr("x", 0)
-    .attr("y", 20);
+    .attr("y", 10);
 
   chartArea.attr("clip-path", "url(#clip)");
 
@@ -241,19 +244,26 @@ async function drawGraph() {
     .style("opacity", 1) // Adjust opacity for low values
     .on("mouseover", (event, d) => {
       const movieData = disneyData.filter((movie) => movie.year === d.year);
-      const topMovie =
-        movieData.length > 0 ? movieData[0].movie_title : "No movie";
+      const topMovie = movieData.length > 0 ? movieData[0].movie_title : null;
       const topMovieGenre =
-        movieData.length > 0 ? movieData[0].genre : "No movie";
+        movieData.length > 0 && movieData[0].genre ? movieData[0].genre : null;
+
       tooltip.transition().duration(200).style("opacity", 1);
+
+      let tooltipContent = `Year: ${d.year}<br>Movies: ${
+        movieCountByYear[d.year]
+      }<br>Unemployed: ${d.UnemployedTotal}`;
+
+      if (topMovie) {
+        tooltipContent += `<br>Top Disney Movie: ${topMovie}`;
+      }
+
+      if (topMovieGenre) {
+        tooltipContent += `<br>Genre: ${topMovieGenre}`;
+      }
+
       tooltip
-        .html(
-          `Year: ${d.year}<br>Movies: ${
-            movieCountByYear[d.year]
-          }<br>Unemployed: ${
-            d.UnemployedTotal
-          }<br>Top Disney Movie: ${topMovie} <br>Genre: ${topMovieGenre}`
-        )
+        .html(tooltipContent)
         .style("left", `${event.pageX + 20}px`)
         .style("top", `${event.pageY - 28}px`);
     })
