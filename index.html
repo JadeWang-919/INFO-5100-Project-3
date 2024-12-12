@@ -1,35 +1,55 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>alcohol vs unemployment</title>
-  <script src="https://d3js.org/d3.v7.min.js"></script>
-  <script src="https://unpkg.com/topojson-client"></script>
-  <link rel="stylesheet" href="Arthur.css">
-</head>
-<body>
-  <h1>Alcohol Consumption and Unemployment in the U.S.</h1>
-  <label for="dataType">Select Alcohol Consumption:</label>
-  <select id="dataType">
-    <option value="ethanol_beer_gallons_per_capita">Beer Consumption</option>
-    <option value="ethanol_wine_gallons_per_capita">Wine Consumption</option>
-    <option value="ethanol_spirit_gallons_per_capita">Spirit Consumption</option>
-  </select>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>alcohol vs unemployment</title>
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <script src="https://unpkg.com/topojson-client"></script>
+    <link rel="stylesheet" href="Arthur.css" />
+    <link rel="stylesheet" href="Jade.css" />
+  </head>
+  <body>
+    <h1>Alcohol Consumption and Unemployment in the U.S.</h1>
+    <label for="dataType">Select Alcohol Consumption:</label>
+    <select id="dataType">
+      <option value="ethanol_beer_gallons_per_capita">Beer Consumption</option>
+      <option value="ethanol_wine_gallons_per_capita">Wine Consumption</option>
+      <option value="ethanol_spirit_gallons_per_capita">
+        Spirit Consumption
+      </option>
+    </select>
 
-  <label for="yearSlider">Select Year:</label>
-  <input type="range" id="yearSlider" min="1977" max="2018" step="1" value="2018">
-  <span id="yearLabel">2018</span>
+    <label for="yearSlider">Select Year:</label>
+    <input
+      type="range"
+      id="yearSlider"
+      min="1977"
+      max="2018"
+      step="1"
+      value="2018"
+    />
+    <span id="yearLabel">2018</span>
 
-  <div style="display: flex; align-items: start;">
-    <!-- US Map -->
-    <svg id="choropleth" width="960" height="600"></svg>
-    <!-- Legend Container -->
-    <div id="legendContainer" style="margin-left: 20px;">
-      <svg id="legendSvg" width="300" height="400"></svg>
+    <div style="display: flex; align-items: start">
+      <!-- US Map -->
+      <svg id="choropleth" width="960" height="600"></svg>
+      <!-- Legend Container -->
+      <div id="legendContainer" style="margin-left: 20px">
+        <svg id="legendSvg" width="300" height="400"></svg>
+      </div>
     </div>
-  </div>
 
-  <script src="Arthur.js"></script>
-</body>
+    <!-- Disney & unemployment chart -->
+    <div id="jade-div">
+      <div class="title-container">
+        <h3>Disney Movies vs Unemployment</h3>
+        <button id="reset-view" class="legend-button">Reset Zoom</button>
+      </div>
+      <svg width="600" height="500" id="jade-svg"></svg>
+    </div>
+
+    <script src="Arthur.js"></script>
+    <script src="Jade.js"></script>
+  </body>
 </html>
