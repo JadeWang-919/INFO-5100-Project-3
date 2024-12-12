@@ -1,0 +1,576 @@
+movie_title,genre,mpaa_rating,total_gross,inflation_adjusted_gross,year
+Snow White and the Seven Dwarfs,Musical,G,184925485,5228953251,1937
+Pinocchio,Adventure,G,84300000,2188229052,1940
+Fantasia,Musical,G,83320000,2187090808,1940
+Song of the South,Adventure,G,65000000,1078510579,1946
+Cinderella,Drama,G,85000000,920608730,1950
+"20,000 Leagues Under the Sea",Adventure,,28200000,528279994,1954
+Lady and the Tramp,Drama,G,93600000,1236035515,1955
+Sleeping Beauty,Drama,,9464608,21505832,1959
+101 Dalmatians,Comedy,G,153000000,1362870985,1961
+The Absent Minded Professor,Comedy,,25381407,310094574,1961
+Babes in Toyland,Musical,G,10218316,124841160,1961
+Bon Voyage!,Comedy,Not Rated,9230769,109581646,1962
+The Sword in the Stone,Adventure,,22182353,153870834,1963
+The Jungle Book,Musical,Not Rated,141843000,789612346,1967
+Blackbeard's Ghost,Comedy,,21540050,138612686,1968
+The Aristocats,Musical,G,55675257,255161499,1970
+The Boatniks,Comedy,,18607492,101200742,1970
+Bedknobs and Broomsticks,Musical,,17871174,91305448,1971
+The Apple Dumpling Gang,Comedy,,31916500,131246872,1975
+Freaky Friday,Comedy,,25942000,98067733,1977
+The Rescuers,Adventure,,48775599,159743914,1977
+Herbie Goes to Monte Carlo,,,28000000,105847527,1977
+The Black Hole,,,35841901,120377374,1979
+Midnight Madness,,,2900000,9088096,1980
+The Last Flight of Noah’s Ark,,,11000000,34472116,1980
+The Devil and Max Devlin,,,16000000,48517980,1981
+The Fox and the Hound,Comedy,,43899231,133118889,1981
+Night Crossing,Drama,,4500000,12903059,1982
+Tron,Action,,26918576,77184895,1982
+Tex,Drama,,7199408,20643199,1982
+Trenchcoat,Comedy,,4304286,11519089,1983
+Something Wicked This Way Comes,Horror,,5656087,15136765,1983
+Never Cry Wolf,Drama,,27668764,70669955,1983
+Running Brave,Drama,,1204595,3223725,1983
+Splash,Comedy,PG,62599495,157057661,1984
+Country,Drama,,8400000,21075000,1984
+Baby: Secret of the Lost Legend,Adventure,,14276095,33900697,1985
+Return to Oz,Adventure,,10618813,25215934,1985
+The Black Cauldron,Adventure,,21288692,50553142,1985
+My Science Project,Comedy,,4100000,9736051,1985
+The Journey of Natty Gann,Drama,,9468512,22302956,1985
+One Magic Christmas,Drama,,13229514,31415432,1985
+Down and Out in Beverly Hills,Comedy,R,62134225,141183693,1986
+Off Beat,Comedy,,4842778,11003932,1986
+Ruthless People,Comedy,R,71624879,162748712,1986
+The Great Mouse Detective,Adventure,,23605534,53637367,1986
+Flight of the Navigator,Adventure,,18564613,42183197,1986
+Tough Guys,Comedy,,21458229,48758184,1986
+The Color of Money,Drama,R,52293000,117957323,1986
+Outrageous Fortune,Comedy,R,52864741,113976921,1987
+Tin Men,Comedy,,25411386,54787202,1987
+Ernest Goes to Camp,Comedy,,23509382,50686462,1987
+Benji the Hunted,Adventure,,15212539,32798382,1987
+Adventures in Babysitting,Comedy,,33790923,72853569,1987
+Stakeout,Comedy,R,65673233,141592160,1987
+Can't Buy Me Love,Romantic Comedy,,31623833,68181300,1987
+Hello Again,Comedy,,20419446,44024529,1987
+3 Men and a Baby,Comedy,PG,167780960,353334607,1987
+Good Morning Vietnam,Comedy,R,123922370,254414837,1987
+Shoot to Kill,Action,,29300000,60097074,1988
+D.O.A.,Thriller/Suspense,,12706478,26062188,1988
+Return to Snowy River,Adventure,PG,13687027,28073384,1988
+Big Business,Comedy,PG,40150487,82352451,1988
+Who Framed Roger Rabbit?,Comedy,PG,154112492,316250084,1988
+Cocktail,Drama,R,78222753,160442289,1988
+The Rescue,Action,,5855392,12009960,1988
+Heartbreak Hotel,Comedy,,5509417,11300331,1988
+The Good Mother,Drama,,4764606,9772655,1988
+Ernest Saves Christmas,Comedy,PG,28202109,57845202,1988
+Oliver & Company,Adventure,G,49576671,102254492,1988
+Beaches,Drama,PG-13,57041866,120381757,1988
+Three Fugitives,Comedy,PG-13,40590000,85757817,1989
+New York Stories,Drama,PG,10763469,22740861,1989
+Disorganized Crime,Comedy,,7210149,15233465,1989
+Dead Poets Society,Drama,PG,95860116,202531517,1989
+"Honey, I Shrunk the Kids",Adventure,PG,130724172,276191669,1989
+Turner & Hooch,Comedy,PG,71079915,150176361,1989
+Cheetah,Adventure,,7882250,16653473,1989
+An Innocent Man,Drama,R,19397847,40983414,1989
+Gross Anatomy,Drama,PG-13,11346186,23972012,1989
+The Little Mermaid,Adventure,G,111543479,223726012,1989
+Blaze,Drama,R,19049727,39884640,1989
+Stella,Drama,PG-13,20062347,40077147,1990
+Where the Heart Is,Comedy,,1106475,2210321,1990
+Pretty Woman,Romantic Comedy,R,178406268,356389765,1990
+Ernest Goes to Jail,Comedy,PG,25029569,49999822,1990
+Spaced Invaders,Comedy,PG,15000000,29964452,1990
+Fire Birds,Action,PG-13,14760451,29485923,1990
+Dick Tracy,Action,PG,103738726,207231621,1990
+Betsy's Wedding,Comedy,R,19740070,39433357,1990
+Arachnophobia,Thriller/Suspense,PG-13,53208180,106290270,1990
+DuckTales: The Movie - Treasure of th…,Adventure,G,18075331,36107823,1990
+Taking Care of Business,Comedy,R,20005435,39963460,1990
+Mr. Destiny,Comedy,PG-13,15379253,30722056,1990
+The Rescuers Down Under,Adventure,G,27931461,55796728,1990
+3 Men and a Little Lady,Comedy,PG,71609321,143108869,1990
+Green Card,Romantic Comedy,PG-13,29804169,59679131,1990
+White Fang,Adventure,PG,34729091,69540672,1991
+Scenes from a Mall,Comedy,,9563393,19149495,1991
+Haakon Haakonsen,Adventure,PG,15024232,30084149,1991
+The Marrying Man,Romantic Comedy,R,12454768,24939118,1991
+Oscar,Comedy,PG,23562716,47181395,1991
+One Good Cop,Action,R,11276846,22580472,1991
+What About Bob?,Comedy,PG,63710000,127571325,1991
+Wild Hearts Can't Be Broken,Drama,,7300000,14617333,1991
+The Rocketeer,Action,PG,46573027,93256673,1991
+The Doctor,Drama,PG-13,37497480,75084021,1991
+Paradise,Drama,PG-13,18634643,37313540,1991
+Deceived,Thriller/Suspense,PG-13,28738096,57544453,1991
+Ernest Scared Stupid,Comedy,PG,14143280,28320147,1991
+Billy Bathgate,Drama,R,15565363,31167691,1991
+Beauty and the Beast,Musical,G,218951625,363017667,1991
+Father of the Bride,Comedy,PG,89325780,179821881,1991
+The Hand That Rocks the Cradle,Thriller/Suspense,R,88036683,178831137,1992
+Medicine Man,Drama,PG-13,44948240,91304495,1992
+Blame it on the Bellboy,Comedy,PG-13,2891055,5872667,1992
+Noises Off...,Comedy,PG-13,2280148,4631720,1992
+Straight Talk,Comedy,PG,21202099,43068356,1992
+Newsies,,PG,2706352,5497481,1992
+Passed Away,,PG-13,4030793,8187848,1992
+Encino Man,Comedy,PG,40057130,81369058,1992
+Sister Act,Comedy,PG,139605150,283583472,1992
+Honey I Blew Up the Kid,Comedy,PG,58662452,119162518,1992
+A Stranger Among Us,Drama,PG-13,12282994,24950752,1992
+3 Ninjas,Action,PG,29028000,58965304,1992
+A Gun in Betty Lou's Handbag,,PG-13,3591460,7295423,1992
+Captain Ron,Comedy,PG-13,22518097,45741576,1992
+Sarafina!,Drama,PG-13,7306242,14841352,1992
+Innocent Blood,Horror,R,4877567,9907922,1992
+The Mighty Ducks,Comedy,PG,50752337,103120810,1992
+1492: Conquest of Paradise,Adventure,PG-13,7099531,14421454,1992
+Consenting Adults,Drama,R,21591728,43859823,1992
+Aladdin,Comedy,G,217350219,441969178,1992
+The Distinguished Gentleman,Comedy,R,46434570,94349900,1992
+The Muppet Christmas Carol,Comedy,G,27281507,55417615,1992
+Alive,Adventure,R,36299670,73914543,1993
+Aspen Extreme,Romantic Comedy,PG-13,7843388,15970955,1993
+Homeward Bound: The Incredible Journey,Adventure,G,41833324,85182343,1993
+The Cemetery Club,Comedy,PG-13,5583621,11369541,1993
+Swing Kids,Musical,PG-13,5632086,11468231,1993
+A Far Off Place,Adventure,PG,12890752,26248558,1993
+Born Yesterday,Romantic Comedy,PG,17760754,36165012,1993
+The Adventures of Huck Finn,Adventure,PG,24103594,49080505,1993
+Bound by Honor,,R,4496583,9156084,1993
+Indian Summer,Comedy,R,14717851,29968953,1993
+Super Mario Bros.,Action,PG,20844907,42445058,1993
+Guilty as Sin,Thriller/Suspense,R,22622537,46064723,1993
+Life With Mikey,Comedy,PG,12349549,25146538,1993
+What's Love Got to Do With It,Drama,R,39100956,79618610,1993
+Son in Law,Comedy,PG-13,25989889,52921433,1993
+Hocus Pocus,Comedy,PG,39360491,80147079,1993
+Another Stakeout,Comedy,PG-13,20107504,40943541,1993
+My Boyfriend's Back,,PG-13,3218882,6554384,1993
+Father Hood,,PG-13,3268203,6654819,1993
+The Joy Luck Club,Drama,R,32790064,66768171,1993
+Money for Nothing,Comedy,R,1044824,2127496,1993
+The Program,Action,R,23042200,46919256,1993
+Cool Runnings,Comedy,PG,68856263,140392731,1993
+The Nightmare Before Christmas,Musical,PG,50408318,100026637,1993
+The Three Musketeers,Adventure,PG,53661805,109310377,1993
+Sister Act 2 Back in the Habit,Comedy,PG,57319029,116965668,1993
+Tombstone,Western,R,56505065,115781734,1993
+The Air Up There,Comedy,PG,20782439,42940186,1994
+Cabin Boy,Comedy,PG-13,3469493,7168577,1994
+Iron Will,Drama,PG,20623071,42610902,1994
+Red Rock West,,R,2502551,5170709,1994
+Blank Check,Comedy,PG,30573770,63170804,1994
+Angie,Comedy,R,9252349,19116981,1994
+The Ref,Comedy,R,11325885,23401275,1994
+D2: The Mighty Ducks,Comedy,PG,45604206,94226333,1994
+Holy Matrimony,Comedy,,713234,1473665,1994
+White Fang 2: Myth of the White Wolf,Adventure,PG,8752399,18083994,1994
+The Inkwell,Comedy,R,8864699,18316030,1994
+When a Man Loves a Woman,Drama,R,50021959,103354194,1994
+3 Ninjas Kick Back,Action,PG,11744960,24267154,1994
+Renaissance Man,Comedy,PG-13,24172899,49945474,1994
+The Lion King,Adventure,G,422780140,761640898,1994
+I Love Trouble,Romantic Comedy,PG,30806194,63651027,1994
+Angels in the Outfield,Comedy,PG,50236831,103798152,1994
+In the Army Now,Comedy,PG,28881266,59673787,1994
+Color of Night,Thriller/Suspense,R,19750470,40804816,1994
+Camp Nowhere,Comedy,PG,10442641,21576332,1994
+It's Pat,Comedy,,60822,125666,1994
+A Simple Twist of Fate,Drama,PG-13,3404935,7035189,1994
+Quiz Show,Drama,PG-13,24787282,50840394,1994
+Terminal Velocity,Action,PG-13,16478900,34048315,1994
+Ed Wood,Comedy,R,5828466,12042634,1994
+The Puppet Masters,Horror,R,8579626,17727017,1994
+Squanto: A Warrior's Tale,Drama,PG,3319344,6858345,1994
+The Santa Clause,Comedy,PG,144833357,298369717,1994
+A Low Down Dirty Shame,Action,R,29317886,60321919,1994
+The Jungle Book,Adventure,PG,44342956,88930321,1994
+Houseguest,Comedy,PG,26325256,51016522,1995
+Bad Company,Thriller/Suspense,R,3523909,6829092,1995
+Miami Rhapsody,Romantic Comedy,PG-13,5086578,9857435,1995
+The Jerky Boys,Comedy,R,7555256,14641561,1995
+Heavy Weights,Comedy,PG,17671310,34245779,1995
+Man of the House,Comedy,PG,40029009,77573459,1995
+Roommates,Comedy,PG,12076989,23404369,1995
+Tall Tale,Western,PG,8247627,15983331,1995
+A Pyromaniac's Love Story,Romantic Comedy,PG,468240,907414,1995
+Jefferson in Paris,Drama,PG-13,2461628,4770461,1995
+Funny Bones,Comedy,R,529135,1025425,1995
+A Goofy Movie,Comedy,G,35336439,68479579,1995
+While You Were Sleeping,Romantic Comedy,PG,81057016,157082900,1995
+Crimson Tide,Action,R,91387195,177102077,1995
+Mad Love,Drama,PG-13,15446532,29934306,1995
+Pocahontas,Adventure,G,141579773,274370957,1995
+Judge Dredd,Action,R,34687912,67222776,1995
+Operation Dumbo Drop,Adventure,PG,24670346,47809421,1995
+Dangerous Minds,Drama,R,84919401,164552293,1995
+A Kid in King Arthur's Court,Adventure,PG,13406717,25981285,1995
+The Tie That Binds,Thriller/Suspense,R,5762795,11167895,1995
+Unstrung Heroes,Drama,PG,7929000,15365850,1995
+The Big Green,Comedy,PG,17736619,34372339,1995
+Dead Presidents,Drama,R,24120194,46741467,1995
+The Scarlet Letter,Drama,R,10359006,20075033,1995
+Feast of July,Drama,R,293274,568342,1995
+Powder,Drama,PG-13,30833914,59727216,1995
+Toy Story,Adventure,G,191796233,370409631,1995
+Father of the Bride Part II,Comedy,PG,76578911,147658438,1995
+Nixon,Drama,R,13668249,26302005,1995
+Tom and Huck,Adventure,PG,23837227,45911517,1995
+Mr. Holland's Opus,Drama,PG,82582604,157508868,1995
+White Squall,Adventure,PG-13,10229300,19509726,1996
+Muppet Treasure Island,Adventure,G,34327391,65470567,1996
+Mr. Wrong,Romantic Comedy,PG-13,12805071,24422334,1996
+Before and After,Drama,PG-13,8642118,16482589,1996
+Up Close & Personal,Drama,PG-13,51045801,97356578,1996
+Homeward Bound II: Lost in San Franc…,Adventure,G,32709423,62384706,1996
+Two Much,Romantic Comedy,PG-13,1078555,2057055,1996
+Un indien dans la ville,Comedy,PG,1029731,1963937,1996
+James and the Giant Peach,Adventure,PG,28921264,55159783,1996
+Celtic Pride,Comedy,PG-13,9240378,17623615,1996
+Last Dance,Drama,R,5857534,11171714,1996
+Boys,Drama,PG-13,21930418,41826566,1996
+Spy Hard,Comedy,PG-13,26936265,51373912,1996
+Eddie,Comedy,PG-13,31369401,59828966,1996
+The Rock,Action,R,134069511,255702705,1996
+The Hunchback of Notre Dame,Adventure,G,100138851,190988799,1996
+Phenomenon,Drama,PG,104636382,199559799,1996
+Kazaam,Comedy,PG,18880508,36009655,1996
+Jack,Drama,PG-13,58617334,111792852,1996
+First Kid,Comedy,PG,26465920,50465108,1996
+The Rich Man's Wife,Thriller/Suspense,R,8538318,16284619,1996
+D3: The Mighty Ducks,Comedy,PG,22936273,43713554,1996
+The Associate,Comedy,PG-13,12772657,24333094,1996
+Ransom,Action,R,136492681,259807820,1996
+The War at Home,,R,34368,65543,1996
+101 Dalmatians,Comedy,G,136189294,258728898,1996
+The Preacher's Wife,Drama,PG,48102795,91076877,1996
+Evita,Musical,PG,50047179,92077628,1996
+Metro,Action,R,32017895,58804106,1997
+Prefontaine,Drama,PG-13,590817,1085093,1997
+Shadow Conspiracy,Thriller/Suspense,R,2154540,3957025,1997
+That Darn Cat,Comedy,PG,18301828,33613158,1997
+Jungle 2 Jungle,Comedy,PG,59925026,110058379,1997
+The Sixth Man,Comedy,PG-13,14765099,27117599,1997
+Grosse Pointe Blank,Black Comedy,R,28084357,51579764,1997
+Romy and Michele's High School Reunion,Comedy,R,29235353,53693680,1997
+Gone Fishin',Comedy,PG,19745922,36265379,1997
+Con Air,Action,R,101117573,185712664,1997
+Hercules,Adventure,G,99112101,182029412,1997
+George Of The Jungle,Comedy,PG,105263257,193326632,1997
+Nothing To Lose,Comedy,R,44480039,81692095,1997
+Air Bud,Comedy,PG,24646936,45266588,1997
+G.I. Jane,Drama,R,48169156,88467531,1997
+A Thousand Acres,Drama,R,7928412,14561324,1997
+Washington Square,Drama,PG,1775644,3257546,1997
+Rocket Man,Comedy,PG,15448043,28371890,1997
+Playing God,Thriller/Suspense,R,4166918,7652965,1997
+Flubber,Comedy,PG,92993801,170406423,1997
+An American Werewolf in Paris,Horror,R,26570463,48546161,1997
+Mr. Magoo,Comedy,PG,21437192,39145784,1997
+Kundun,Drama,PG-13,5686694,10236836,1997
+Deep Rising,Action,R,11203026,20136775,1998
+Krippendorf's Tribe,Comedy,PG-13,7571115,13608633,1998
+An Alan Smithee Film: Burn Hollywood …,Comedy,R,45779,82277,1998
+Meet the Deedles,Comedy,PG,4356126,7829877,1998
+He Got Game,Drama,R,21567853,38766948,1998
+The Horse Whisperer,Drama,PG-13,75383563,135497531,1998
+"Six Days, Seven Nights",Romantic Comedy,PG-13,74339294,133620516,1998
+Mulan,Adventure,G,120620254,216807832,1998
+Armageddon,Adventure,PG-13,201578182,362324957,1998
+Jane Austen's Mafia,Comedy,PG-13,19843795,35668055,1998
+The Parent Trap,Comedy,PG,66308518,119185667,1998
+Firelight,Drama,R,784419,1409943,1998
+Simon Birch,Drama,PG,18253415,32809442,1998
+Holy Man,Comedy,PG,12069719,21694605,1998
+Beloved,Drama,R,22852487,41062682,1998
+The Waterboy,Comedy,PG-13,161491646,288691833,1998
+I'll Be Home For Christmas,Comedy,PG,12214338,21941840,1998
+A Bug's Life,Adventure,G,162798565,288981698,1998
+Enemy of the State,Action,R,111549836,198472008,1998
+Rushmore,Black Comedy,R,17105219,28392518,1998
+A Civil Action,Drama,PG-13,56709981,94139530,1998
+Mighty Joe Young,Adventure,PG,50632037,87906042,1998
+My Favorite Martian,Comedy,PG,36850101,61150849,1999
+The Other Sister,Romantic Comedy,PG-13,27807627,46145331,1999
+Doug's 1st Movie,Adventure,G,19421271,32228598,1999
+Ten Things I Hate About You,Romantic Comedy,PG-13,38177966,63354375,1999
+Endurance,,PG,229128,380218,1999
+Instinct,Drama,R,34105207,56595842,1999
+Tarzan,Adventure,G,171091819,283900254,1999
+Summer of Sam,Drama,R,19288130,32007656,1999
+Inspector Gadget,Comedy,PG,97387965,161610341,1999
+The Sixth Sense,Thriller/Suspense,PG-13,293506292,485424724,1999
+The 13th Warrior,Action,R,32698899,54262148,1999
+Breakfast of Champions,Comedy,R,178287,295851,1999
+Mumford,Comedy,R,4559569,7566363,1999
+"Mystery, Alaska",Comedy,R,8891623,14755189,1999
+The Straight Story,Drama,G,6197866,10111144,1999
+The Insider,Drama,R,28965197,47794214,1999
+Toy Story 2,Adventure,G,245852179,404450426,1999
+Cradle Will Rock,Drama,R,2899970,4609153,1999
+Deuce Bigalow: Male Gigolo,Comedy,R,65535067,106921374,1999
+Bicentennial Man,Drama,PG,58220776,94838225,1999
+Play it to the Bone,Comedy,R,8427204,13180524,1999
+Fantasia 2000 (IMAX),Musical,G,60507228,94852354,2000
+Gun Shy,Comedy,R,1638202,2562155,2000
+The Tigger Movie,Adventure,G,45542421,71228678,2000
+Mission to Mars,Adventure,PG,60874615,95208344,2000
+High Fidelity,Comedy,R,27277055,42661516,2000
+Keeping the Faith,Romantic Comedy,PG-13,37036404,57925202,2000
+Dinosaur,Adventure,PG,137748063,215438985,2000
+Shanghai Noon,Western,PG-13,56932305,89042541,2000
+Gone in 60 Seconds,Action,PG-13,101643008,158970411,2000
+Fantasia 2000 (Theatrical Release),Musical,G,9103630,14238144,2000
+The Kid,Comedy,PG,69688384,108993148,2000
+Coyote Ugly,Drama,PG-13,60786269,95070168,2000
+The Crew,Comedy,PG-13,13019253,20362201,2000
+Duets,Drama,R,4734235,7404372,2000
+Remember the Titans,Drama,PG,115654751,180742479,2000
+Unbreakable,Thriller/Suspense,PG-13,94999143,148208901,2000
+102 Dalmatians,Comedy,G,66941559,104055039,2000
+The Emperor's New Groove,Adventure,G,89296573,136789252,2000
+"O Brother, Where Art Thou?",Comedy,PG-13,45506619,67922002,2000
+Double Take,Action,PG-13,29823162,44418589,2001
+Recess: School's Out,Comedy,G,36696761,54656124,2001
+Just Visiting,Comedy,PG-13,4777007,7114869,2001
+Pearl Harbor,Action,PG-13,198539855,295705112,2001
+Atlantis: The Lost Empire,Adventure,PG,84052762,125188122,2001
+crazy/beautiful,Drama,PG-13,16929123,25214223,2001
+The Princess Diaries,Comedy,G,108244774,161218928,2001
+Bubble Boy,Comedy,PG-13,5002310,7450434,2001
+Max Keeble's Big Move,Comedy,PG,17292381,25749730,2001
+Corky Romano,Comedy,PG-13,23978402,35705805,2001
+High Heels and Low Lifes,,R,226792,337782,2001
+"Monsters, Inc.",Adventure,G,289423425,416073179,2001
+Out Cold,Comedy,PG-13,13906394,20700691,2001
+The Royal Tenenbaums,Black Comedy,R,52353636,76758193,2001
+Beauty and the Beast (IMAX),Musical,G,25487028,36980311,2002
+Snow Dogs,Comedy,PG,81150692,117745317,2002
+The Count of Monte Cristo,Drama,PG-13,54228104,78682079,2002
+Peter Pan: Return to Neverland,Adventure,G,48430258,70269715,2002
+Reign of Fire,Action,PG-13,43061982,62480631,2002
+Sorority Boys,Comedy,R,10198766,14797862,2002
+The Rookie,Drama,G,75600072,109691666,2002
+Big Trouble,Comedy,PG-13,7262288,10537188,2002
+ESPN's Ultimate X - The Movie,Documentary,PG,4197175,6089874,2002
+Bad Company,Action,PG-13,30157016,43756218,2002
+Lilo & Stitch,Adventure,PG,145771527,211506702,2002
+The Country Bears,Adventure,G,16988996,24650121,2002
+Signs,Thriller/Suspense,PG-13,227965690,330754439,2002
+Sen to Chihiro no Kamikakushi,Adventure,PG,10049886,14338992,2002
+Sweet Home Alabama,Comedy,PG-13,127214072,184521151,2002
+Moonlight Mile,Drama,PG-13,6830957,9909094,2002
+Tuck Everlasting,Drama,PG,19161999,27789959,2002
+The Santa Clause 2,Comedy,G,139225854,201959095,2002
+Treasure Planet,Adventure,PG,38120554,55189145,2002
+The Hot Chick,Comedy,PG-13,35081550,50624654,2002
+25th Hour,Drama,R,13084595,18325463,2002
+The Recruit,Thriller/Suspense,PG-13,52784696,73793522,2003
+Shanghai Knights,Adventure,PG-13,60470220,84537962,2003
+The Jungle Book 2,Adventure,G,47901582,66966883,2003
+Bringing Down the House,Comedy,PG-13,132675402,185481530,2003
+Piglet's Big Movie,Comedy,G,23103423,32298812,2003
+Ghosts of the Abyss,Documentary,G,17093668,23803108,2003
+Holes,Drama,PG,67383924,94203395,2003
+The Lizzie McGuire Movie,Comedy,PG,42734455,59743191,2003
+Finding Nemo,Adventure,G,380529370,518148559,2003
+Pirates of the Caribbean: The Curse o…,Adventure,PG-13,305411224,426967926,2003
+Freaky Friday,Comedy,PG,110222438,154090360,2003
+Open Range,Western,R,58331254,81547672,2003
+Cold Creek Manor,Thriller/Suspense,R,21384035,29895090,2003
+Under the Tuscan Sun,Comedy,PG-13,43601508,60944053,2003
+Veronica Guerin,Drama,R,1569918,2194759,2003
+Brother Bear,Adventure,G,85336277,119218333,2003
+The Haunted Mansion,Comedy,PG,75817994,105775678,2003
+Calendar Girls,Comedy,PG-13,31011616,42379650,2003
+Young Black Stallion,Adventure,G,6751389,9254344,2003
+Teacher's Pet: The Movie,Comedy,PG,6491969,8812764,2004
+Miracle,Drama,PG,64378093,87392478,2004
+Confessions of a Teenage Drama Queen,Comedy,PG,29331068,39816568,2004
+Hidalgo,Western,PG-13,67286731,91340921,2004
+The Ladykillers,Comedy,R,39692139,53881593,2004
+Home on the Range,Comedy,PG,50026353,67910166,2004
+The Alamo,Western,PG-13,22406362,30416359,2004
+Raising Helen,Comedy,PG-13,37485528,50886144,2004
+Around the World in 80 Days,Adventure,PG,24004159,32585356,2004
+America's Heart and Soul,Documentary,Not Rated,314000,426246,2004
+King Arthur,Adventure,PG-13,51877963,70423706,2004
+The Village,Thriller/Suspense,PG-13,114197520,155021748,2004
+The Princess Diaries 2: Royal Engagement,Romantic Comedy,G,95149435,129164207,2004
+Mr. 3000,Comedy,PG-13,21800302,29593641,2004
+The Last Shot,Comedy,R,463730,629502,2004
+Ladder 49,Action,PG-13,74541707,101161045,2004
+The Incredibles,Adventure,PG,261441092,354488708,2004
+National Treasure,Adventure,PG,173005002,234069353,2004
+The Life Aquatic with Steve Zissou,Comedy,R,24006726,32198655,2004
+Aliens of the Deep,Documentary,G,8968684,11740942,2005
+Pooh's Heffalump Movie,Adventure,G,18098433,23801835,2005
+The Pacifier,Comedy,PG,113006880,148619029,2005
+Ice Princess,Comedy,G,24381334,32064685,2005
+A Lot Like Love,Comedy,PG-13,21835784,28716947,2005
+The Hitchhiker's Guide to the Galaxy,Comedy,PG,51019112,67096891,2005
+Hauru no ugoku shiro,Adventure,PG,4710455,6194870,2005
+Herbie: Fully Loaded,Comedy,G,66010682,86812798,2005
+Dark Water,Thriller/Suspense,PG-13,25473093,33500491,2005
+Sky High,Adventure,PG,63939454,84088854,2005
+Valiant,Adventure,G,19478106,25616292,2005
+Flightplan,Thriller/Suspense,PG-13,89706988,117960425,2005
+The Greatest Game Ever Played,Drama,PG,15331289,20162672,2005
+Shopgirl,Drama,R,10284523,13519621,2005
+Chicken Little,Adventure,G,135386665,177954661,2005
+"The Chronicles of Narnia: The Lion, t…",Adventure,PG,291710957,381557539,2005
+Casanova,Drama,R,11304403,14574087,2005
+Glory Road,Drama,PG,42647449,54888236,2006
+Annapolis,Drama,PG-13,17127992,22044113,2006
+Roving Mars,Documentary,G,10407978,12948025,2006
+Eight Below,Adventure,PG,81612565,105037235,2006
+The Shaggy Dog,Comedy,PG,61123569,78667428,2006
+Stay Alive,Horror,PG-13,23086480,29712825,2006
+The Wild,Adventure,G,37384046,48114115,2006
+Stick It,Comedy,PG-13,26910736,34634731,2006
+Goal! The Dream Begins,Drama,PG,4283255,5512647,2006
+Cars,Comedy,G,244082982,314140384,2006
+Pirates of the Caribbean: Dead Man’…,Adventure,PG-13,423315812,544817142,2006
+Step Up,Drama,PG-13,65328121,84078780,2006
+Invincible,Drama,PG,57806952,74398864,2006
+The Guardian,Action,PG-13,55011732,70801353,2006
+The Prestige,Thriller/Suspense,PG-13,53089891,68289913,2006
+Tim Burton's The Nightmare Before Chr…,Musical,PG,24732041,30737517,2006
+The Santa Clause 3: The Escape Clause,Comedy,G,84500122,108694869,2006
+Déjà Vu,Thriller/Suspense,PG-13,64038616,82267038,2006
+Apocalypto,Adventure,R,50866635,64959548,2006
+Primeval,Adventure,R,10597734,12985302,2007
+Bridge to Terabithia,Drama,PG,82234139,100760721,2007
+Wild Hogs,Comedy,PG-13,168213584,206110533,2007
+Meet the Robinsons,Adventure,G,97822171,119860589,2007
+The Lookout,Drama,R,4600585,5637048,2007
+The Hoax,Drama,R,7164995,8779196,2007
+The Invisible,Thriller/Suspense,PG-13,20568319,25202168,2007
+Pirates of the Caribbean: At World’…,Adventure,PG-13,309420425,379129960,2007
+Ratatouille,Comedy,G,206445654,252955933,2007
+Underdog,Adventure,PG,43760605,53619462,2007
+The Game Plan,Comedy,PG,90648202,111010758,2007
+Dan in Real Life,Romantic Comedy,PG-13,47642963,58350234,2007
+Enchanted,Romantic Comedy,PG,127706877,156074310,2007
+National Treasure 2: Book of Secrets,Adventure,PG,219961501,267003525,2007
+Hannah Montana/Miley Cyrus: Best of B…,Concert/Performance,G,65281781,76646993,2008
+Step Up 2 the Streets,Drama,PG-13,58017783,68118371,2008
+College Road Trip,Comedy,G,45610425,53550960,2008
+The Chronicles of Narnia: Prince Caspian,Adventure,PG,141621490,166277038,2008
+WALL-E,Adventure,G,223808164,262771918,2008
+Swing Vote,Comedy,PG-13,16289867,19125841,2008
+Goal! 2: Living the Dream...,Drama,PG-13,225067,264247,2008
+Miracle at St. Anna,Drama,R,7916887,9295171,2008
+Beverly Hills Chihuahua,Comedy,PG,94514402,110932022,2008
+Morning Light,Documentary,PG,275093,322979,2008
+High School Musical 3: Senior Year,Musical,G,90559416,106308538,2008
+Bolt,Comedy,PG,114053759,133702498,2008
+Bedtime Stories,Comedy,PG,110101975,128039679,2008
+Confessions of a Shopaholic,Romantic Comedy,PG,44277350,49767744,2009
+Jonas Brothers: The 3D Concert Experi…,Concert/Performance,G,38174685,38174685,2009
+Race to Witch Mountain,Adventure,PG,67172594,75501997,2009
+Hannah Montana the Movie,Drama,G,79576189,89443640,2009
+Earth,Documentary,G,32011576,35981010,2009
+Up,Adventure,PG,293004164,329336681,2009
+The Proposal,Romantic Comedy,PG-13,163958031,184288829,2009
+G-Force,Adventure,PG,119436770,134246932,2009
+Gake no ue no Ponyo,Adventure,G,15090399,16961607,2009
+X Games 3D: The Movie,Documentary,PG,1391434,1563976,2009
+Walt and El Grupo,Documentary,PG,20521,23064,2009
+Surrogates,Action,PG-13,38577772,43361416,2009
+Toy Story 3D Double Feature,Adventure,G,30702446,34509545,2009
+Disney's A Christmas Carol,Drama,PG,137855863,154927105,2009
+The Princess and the Frog,Adventure,G,104400899,116316457,2009
+Old Dogs,Comedy,PG,49492060,55503929,2009
+When in Rome,Romantic Comedy,PG-13,32680633,34917330,2010
+Alice in Wonderland,Adventure,PG,334191110,357063499,2010
+Waking Sleeping Beauty,Documentary,PG,80741,86264,2010
+The Last Song,Drama,PG,62950384,67258772,2010
+Oceans,Documentary,G,19422319,20751600,2010
+Prince of Persia: Sands of Time,Action,PG-13,90759676,96971361,2010
+Toy Story 3,Adventure,G,415004880,443408255,2010
+The Sorcerer's Apprentice,Adventure,PG,63150991,67473105,2010
+Step Up 3D,Drama,PG-13,42400223,45302137,2010
+Gedo Senki (Tales from Earthsea),Adventure,PG-13,48658,51988,2010
+You Again,Comedy,PG,25702053,27461121,2010
+Secretariat,Drama,PG,59699513,63781920,2010
+Tangled,Adventure,PG,200821936,214388548,2010
+Tron: Legacy,Adventure,PG,172062763,183619259,2010
+Gnomeo and Juliet,Comedy,G,99967670,106270797,2011
+I am Number Four,Adventure,PG-13,55100437,58574607,2011
+Mars Needs Moms,Adventure,PG,21392758,22741603,2011
+African Cats,Documentary,G,15428747,16401551,2011
+Zokkomon,Adventure,PG,2815,2984,2011
+Prom,Comedy,PG,10130219,10768946,2011
+Pirates of the Caribbean: On Stranger…,Adventure,PG-13,241063875,256263359,2011
+Cars 2,Adventure,G,191450875,203522177,2011
+Winnie the Pooh,Adventure,G,26692846,28375869,2011
+The Help,Drama,PG-13,169705587,180404976,2011
+Fright Night,Horror,R,18298649,19452402,2011
+Real Steel,Action,PG-13,85463309,90848019,2011
+The Muppets,Comedy,PG,88625922,94189503,2011
+War Horse,Drama,PG-13,79883359,84762149,2011
+The Secret World of Arietty,Adventure,G,19192510,20325733,2012
+John Carter,Adventure,PG-13,73058679,77372445,2012
+Chimpanzee,Documentary,G,28965459,30675725,2012
+The Avengers,Action,PG-13,623279547,660081224,2012
+Brave,Adventure,PG,237282182,251292441,2012
+People Like Us,Drama,PG-13,12431792,13165822,2012
+The Odd Life of Timothy Green,Drama,PG,51853450,54914942,2012
+Frankenweenie,Comedy,PG,35287788,37363513,2012
+Wreck-It Ralph,Adventure,PG,189412677,200354959,2012
+Lincoln,Drama,PG-13,182207973,192122330,2012
+Oz the Great and Powerful,Adventure,PG,234770996,243434130,2013
+Iron Man 3,Action,PG-13,408992272,424084233,2013
+Monsters University,Adventure,G,268488329,278395641,2013
+The Lone Ranger,Western,PG-13,89302115,92597388,2013
+Disney Planes,Comedy,PG,90282580,93614037,2013
+The Fifth Estate,Drama,R,3254172,3374251,2013
+Thor: The Dark World,Adventure,PG-13,206362140,213962184,2013
+Kaze Tachinu,Drama,PG-13,5201879,5367415,2013
+Frozen,Adventure,PG,400738009,414997174,2013
+Delivery Man,Comedy,PG-13,30659817,31787136,2013
+Saving Mr. Banks,Drama,PG-13,83299761,86249969,2013
+Need for Speed,Action,PG-13,43568507,44955015,2014
+Muppets Most Wanted,Comedy,PG,51178893,52807594,2014
+Captain America: The Winter Soldier,Action,PG-13,259746958,268013076,2014
+Bears,Documentary,G,17780194,18346024,2014
+Million Dollar Arm,Drama,PG,36447959,37607865,2014
+Maleficent,Adventure,PG,241407328,249089809,2014
+Planes: Fire and Rescue,Adventure,PG,59157732,61040349,2014
+Guardians of the Galaxy,Adventure,PG-13,333172112,343771168,2014
+The Hundred-Foot Journey,Romantic Comedy,PG,54235441,55961409,2014
+"Alexander and the Terrible, Horrible,…",Comedy,PG,66954149,69055550,2014
+Big Hero 6,Adventure,PG,222527828,229249222,2014
+Into the Woods,Musical,PG,128002372,130894237,2014
+Strange Magic,Adventure,PG,12429583,12429583,2015
+"McFarland, USA",Drama,PG,44480275,44480275,2015
+Cinderella,Drama,PG,201151353,201151353,2015
+Monkey Kingdom,Documentary,G,16432322,16432322,2015
+Avengers: Age of Ultron,Action,PG-13,459005868,459005868,2015
+Tomorrowland,Adventure,PG,93436322,93436322,2015
+Inside Out,Adventure,PG,356461711,356461711,2015
+Ant-Man,Action,PG-13,180202163,180202163,2015
+Bridge of Spies,Thriller/Suspense,PG-13,72313754,72313754,2015
+The Good Dinosaur,Adventure,PG,123087120,123087120,2015
+Star Wars Ep. VII: The Force Awakens,Adventure,PG-13,936662225,936662225,2015
+The Finest Hours,Thriller/Suspense,PG,27569558,27569558,2016
+Zootopia,Adventure,PG,341268248,341268248,2016
+The Jungle Book,Adventure,PG,364001123,364001123,2016
+A Beautiful Planet,Documentary,G,7895708,7895708,2016
+Captain America: Civil War,Action,PG-13,408084349,408084349,2016
+Alice Through the Looking Glass,Adventure,PG,77042381,77042381,2016
+Finding Dory,Adventure,PG,486295561,486295561,2016
+The BFG,Adventure,PG,55483770,55483770,2016
+Pete’s Dragon,Adventure,PG,76233151,76233151,2016
+The Light Between Oceans,Drama,PG-13,12545979,12545979,2016
+Queen of Katwe,Drama,PG,8874389,8874389,2016
+Doctor Strange,Adventure,PG-13,232532923,232532923,2016
+Moana,Adventure,PG,246082029,246082029,2016
+Rogue One: A Star Wars Story,Adventure,PG-13,529483936,529483936,2016

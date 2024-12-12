@@ -1,13 +1,22 @@
 #jade-div {
-  width: 600px;
+  width: 1170px;
 }
 
-.title-container {
+.legend-button {
+  align-self: flex-end;
+}
+
+#jade-legendContainer {
   display: flex;
+  flex-direction: column;
+  justify-content: center;
   align-items: center;
-  justify-content: space-between;
 }
 
-.title-container button {
-  margin-left: 10px;
+.gridlines line {
+  stroke: #bbb;
+}
+
+.gridlines .domain {
+  stroke: none;
 }

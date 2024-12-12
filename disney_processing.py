@@ -1,16 +1,20 @@
 import pandas as pd
 
-# Read the CSV file
-df = pd.read_csv("disney_movies_original.csv")
+# File paths
+input_file = "disney_movies.csv"
+output_file = "disney_modified.csv"
 
-# Extract the year from the release_date column
-df["Year"] = df["release_date"].str.split("/").str[2]
+# Load the data
+df = pd.read_csv(input_file)
 
-# Drop rows with total_gross = 0
+# Extract the year from 'release_date' and rename the column to 'year'
+df["year"] = pd.to_datetime(df["release_date"]).dt.year
+
+# Remove rows where 'total_gross' is 0
 df = df[df["total_gross"] != 0]
 
-# Drop the original release_date column
-df = df.drop("release_date", axis=1)
+# Drop the old 'release_date' column
+df.drop(columns=["release_date"], inplace=True)
 
-# Write the modified DataFrame to a new CSV file
-df.to_csv("disney_modified.csv", index=False)
+# Save the modified data to a new CSV file
+df.to_csv(output_file, index=False)

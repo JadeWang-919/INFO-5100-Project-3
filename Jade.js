@@ -1,10 +1,70 @@
-d3.csv("merged_scatterplot_data.csv", d3.autoType).then((data) => {
+async function drawGraph() {
   const svg = d3.select("#jade-svg");
   const width = svg.attr("width");
   const height = svg.attr("height");
-  const margin = { top: 0, right: 5, bottom: 60, left: 60 };
+  const margin = { top: 40, right: 60, bottom: 60, left: 80 };
   const chartWidth = width - margin.left - margin.right;
   const chartHeight = height - margin.top - margin.bottom;
+  const disneyData = await d3.csv("disney_modified.csv", d3.autoType);
+  const unemployData = await d3.csv(
+    "unemployment_by_state_1976_2018.csv",
+    d3.autoType
+  );
+
+  const title = svg
+    .append("text")
+    .text("Disney Movies vs Unemployment in US")
+    .attr("x", margin.left + chartWidth / 2)
+    .attr("y", 25)
+    .attr("text-anchor", "middle")
+    .style("font-size", "20px")
+    .style("font-weight", "bold")
+    .attr("class", "h3");
+
+  // Count number of Disney movies by year
+  let movieCountByYear = {};
+  for (let i = 0; i < disneyData.length; i++) {
+    let year = disneyData[i].year;
+    if (!movieCountByYear[year]) {
+      movieCountByYear[year] = 1;
+    } else {
+      movieCountByYear[year]++;
+    }
+  }
+
+  // Ensure all years are included
+  for (let year = 1976; year <= 2016; year++) {
+    if (!movieCountByYear[year]) {
+      movieCountByYear[year] = 0;
+    }
+  }
+
+  let minMovies = Infinity;
+  let maxMovies = -Infinity;
+  for (let year in movieCountByYear) {
+    let count = movieCountByYear[year];
+    if (count < minMovies) minMovies = count;
+    if (count > maxMovies) maxMovies = count;
+  }
+
+  // Function to aggregate "UnemployedTotal" by year
+  function aggregateUnemployment(data) {
+    return data.reduce((acc, curr) => {
+      const unemployed = Number(curr["Unemployed - Total"]);
+      const existingYear = acc.find((item) => item.year === curr.year);
+      if (existingYear) {
+        existingYear["UnemployedTotal"] += unemployed;
+      } else {
+        acc.push({
+          year: curr.year,
+          UnemployedTotal: unemployed,
+        });
+      }
+      return acc;
+    }, []);
+  }
+
+  const aggregatedData = Object.values(aggregateUnemployment(unemployData));
 
   let annotations = svg.append("g").attr("id", "annotations");
   let chartArea = svg
@@ -14,19 +74,29 @@ d3.csv("merged_scatterplot_data.csv", d3.autoType).then((data) => {
 
   const xScale = d3
     .scaleLinear()
-    .domain(d3.extent(data, (d) => d["happiness_score"]))
-    .range([10, chartWidth - 10]);
+    .domain(d3.extent(aggregatedData, (d) => d["year"]))
+    .range([20, chartWidth]);
 
   const yScale = d3
     .scaleLog()
-    .domain(d3.extent(data, (d) => d["2022_consumption"]))
-    .range([chartHeight - 10, 10]);
+    .domain(d3.extent(aggregatedData, (d) => d.UnemployedTotal))
+    .range([chartHeight - 20, 20]);
 
-  const colorScale = d3.scaleOrdinal(d3.schemeCategory10);
+  const colorScale = d3
+    .scaleSequential(d3.interpolateBlues)
+    .domain([minMovies, maxMovies]);
+
+  const radiusScale = d3
+    .scaleLinear()
+    .domain([0, maxMovies]) // Adjust this range
+    .range([5, 10]); // Minimum and maximum radius for circles
 
   // Axes & Gridlines
-  let xAxis = d3.axisBottom(xScale);
-  let xGridlines = d3.axisBottom(xScale).tickSize(-chartHeight).tickFormat("");
+  let xAxis = d3.axisBottom(xScale).tickFormat(d3.format("d"));
+  let xGridlines = d3
+    .axisBottom(xScale)
+    .tickSize(-chartHeight + 20)
+    .tickFormat("");
   annotations
     .append("g")
     .attr("class", "x axis")
@@ -40,11 +110,11 @@ d3.csv("merged_scatterplot_data.csv", d3.autoType).then((data) => {
   svg
     .append("text")
     .attr("x", margin.left + chartWidth / 2)
-    .attr("y", chartHeight + 50)
+    .attr("y", margin.top + chartHeight + 40)
     .attr("text-anchor", "middle")
     .style("font-weight", "bold")
     .style("font-size", "13px")
-    .text("Happiness Score");
+    .text("Year");
 
   let yAxis = d3.axisLeft(yScale);
   let yGridlines = d3.axisLeft(yScale).tickSize(-chartWidth).tickFormat("");
@@ -63,128 +133,23 @@ d3.csv("merged_scatterplot_data.csv", d3.autoType).then((data) => {
     .append("text")
     .attr("transform", "rotate(-90)")
     .attr("x", -margin.top - chartHeight / 2)
-    .attr("y", margin.left / 2 - 10)
+    .attr("y", margin.left / 2 - 15)
     .attr("text-anchor", "middle")
     .style("font-weight", "bold")
     .style("font-size", "13px")
-    .text("Instant Noodle Consumption in millions of dollars (Log Scale)");
+    .text("Unemployment Population in US");
 
   // Tooltip
   const tooltip = d3
     .select("#jade-div")
     .append("div")
-    .attr("class", "tooltip-jade")
+    .attr("class", "arthur-tooltip")
     .style("opacity", 0);
 
-  // Draw the trend line
-  // Function to perform linear regression on the dataset
-  function linearRegression(data) {
-    const meanHappiness = d3.mean(data, (d) => d["happiness_score"]);
-    const meanLogConsumption = d3.mean(data, (d) =>
-      Math.log(d["2022_consumption"])
-    );
+  // Adjust zoom target
+  const chartZoom = d3.zoom().scaleExtent([1, 5]).on("zoom", chartZoomed);
+  svg.call(chartZoom); // Apply zoom to chartArea
 
-    // Calculate the slope of the trend line
-    const slope =
-      d3.sum(
-        data,
-        (d) =>
-          (d["happiness_score"] - meanHappiness) *
-          (Math.log(d["2022_consumption"]) - meanLogConsumption)
-      ) /
-      d3.sum(data, (d) => Math.pow(d["happiness_score"] - meanHappiness, 2));
-
-    const intercept = meanLogConsumption - slope * meanHappiness;
-
-    return { slope, intercept };
-  }
-
-  const { slope, intercept } = linearRegression(data);
-
-  // Draw the trend line on the chart
-  const trendLine = chartArea
-    .append("line")
-    .attr("stroke", "grey")
-    .attr("stroke-width", 2)
-    .attr("stroke-dasharray", "5,5");
-
-  function updateTrendLine(xScale, yScale) {
-    const startHappiness = d3.min(data, (d) => d["happiness_score"]);
-    const endHappiness = d3.max(data, (d) => d["happiness_score"]);
-
-    const startConsumption = Math.exp(intercept + slope * startHappiness);
-    const endConsumption = Math.exp(intercept + slope * endHappiness);
-
-    trendLine
-      .attr("x1", xScale(startHappiness))
-      .attr("y1", yScale(startConsumption))
-      .attr("x2", xScale(endHappiness))
-      .attr("y2", yScale(endConsumption));
-  }
-
-  updateTrendLine(xScale, yScale);
-
-  const trendBtn = d3.select("#show-trend");
-
-  trendBtn.on("click", () => {
-    // Get the current opacity as a number
-    const trendLineOpacity = parseFloat(trendLine.style("opacity"));
-
-    trendLine.style("opacity", trendLineOpacity === 0 ? 1 : 0);
-
-    trendBtn.text(
-      // if trendLineOpacity was 1, now it should be 0, so we display show trend line
-      trendLineOpacity === 1 ? "Show Trend Line" : "Hide Trend Line"
-    );
-  });
-
-  // Function to compute the correlation coefficient
-  function correlationCoefficient(data) {
-    const meanHappiness = d3.mean(data, (d) => d["happiness_score"]);
-    const meanLogConsumption = d3.mean(data, (d) =>
-      Math.log(d["2022_consumption"])
-    ); // Calculate mean of log consumption
-
-    const numerator = d3.sum(
-      data,
-      (d) =>
-        (d["happiness_score"] - meanHappiness) *
-        (Math.log(d["2022_consumption"]) - meanLogConsumption)
-    );
-
-    const denominator = Math.sqrt(
-      d3.sum(data, (d) => Math.pow(d["happiness_score"] - meanHappiness, 2)) *
-        d3.sum(data, (d) =>
-          Math.pow(Math.log(d["2022_consumption"]) - meanLogConsumption, 2)
-        )
-    );
-
-    return numerator / denominator; // Return the calculated correlation coefficient
-  }
-
-  const r = correlationCoefficient(data);
-
-  const corrBigDiv = d3.select(".correlation-coefficient");
-  const corrDiv = d3.select(".correlation-div");
-
-  corrDiv
-    .append("p")
-    .text(
-      `Correlation Coefficient: ${r.toFixed(
-        2
-      )} (based on log-transformed Y values).`
-    );
-  console.log("corrDiv:", corrDiv);
-
-  corrBigDiv
-    .append("p")
-    .text(
-      `This indicates a weak negative relationship between happiness scores and instant noodle consumption.`
-    );
-
-  // Handle Zooming
-  var chartZoom = d3.zoom().scaleExtent([0.5, 5]).on("zoom", chartZoomed);
-  svg.call(chartZoom);
   function chartZoomed(event) {
     viewport.attr("transform", event.transform);
 
@@ -201,142 +166,163 @@ d3.csv("merged_scatterplot_data.csv", d3.autoType).then((data) => {
     d3.select("g.x.gridlines").call(xGridlines);
     d3.select("g.y.gridlines").call(yGridlines);
 
-    viewport.selectAll("circle").attr("r", 6 / event.transform.k);
+    // Update circles' positions and sizes
+    viewport
+      .selectAll("circle")
+      .attr(
+        "r",
+        (d) => radiusScale(movieCountByYear[d.year]) / event.transform.k
+      )
+      .attr("stroke-width", 2 / event.transform.k);
 
-    // Update the trend line with the new scales
-    updateTrendLine(new_xScale, new_yScale);
+    // Update line path with new scales
+    linePath.attr(
+      "d",
+      d3
+        .line()
+        .x((d) => new_xScale(d.year))
+        .y((d) => new_yScale(d.UnemployedTotal))
+        .curve(d3.curveMonotoneX)(aggregatedData)
+    );
+
+    console.log("Zoomed");
   }
 
+  // Reset zoom
   function resetZoom() {
     svg.transition().call(chartZoom.transform, d3.zoomIdentity);
   }
-
   document.getElementById("reset-view").addEventListener("click", resetZoom);
 
+  // Clip Path for the chart
   svg
     .append("defs")
     .append("clipPath")
     .attr("id", "clip")
     .append("rect")
     .attr("width", chartWidth)
-    .attr("height", chartHeight)
+    .attr("height", chartHeight - 20)
     .attr("x", 0)
-    .attr("y", 0);
+    .attr("y", 20);
 
   chartArea.attr("clip-path", "url(#clip)");
-
-  let selectedContinent = null;
-  let selectedCountry = null;
-
-  // Legend Buttons
-  const uniqueContinents = Array.from(new Set(data.map((d) => d.Continent)));
-  const buttonContainer = d3
-    .select("#jade-div")
-    .append("div")
-    .attr("class", "legend-button-container");
-
-  buttonContainer
-    .selectAll(".legend-button")
-    .data(uniqueContinents)
-    .join("button")
-    .attr("class", "legend-button")
-    .style("border", (d) => `2px solid ${colorScale(d)}`)
-    .style("color", (d) => colorScale(d))
-    .text((d) => d)
-    .on("click", function (event, continent) {
-      const currentZoomScale = d3.zoomTransform(
-        d3.select("#jade-svg").node()
-      ).k;
-      // Reset the selected country when a continent filter is clicked
-      selectedCountry = null;
-      selectedContinent = continent;
-      d3.selectAll(".point")
-        .transition()
-        .duration(200)
-        .attr("r", 6 / currentZoomScale)
-        .attr("opacity", (d) => (d.Continent === continent ? 0.6 : 0.07));
-    });
-
-  // Reset filter with "Show All" button
-  buttonContainer
-    .append("button")
-    .attr("class", "legend-button")
-    .style("border", "2px solid black")
-    .style("color", "black")
-    .text("Show All")
-    .on("click", () => {
-      selectedCountry = null;
-      selectedContinent = null;
-      const currentZoomScale = d3.zoomTransform(
-        d3.select("#jade-svg").node()
-      ).k;
-      d3.selectAll(".point")
-        .transition()
-        .duration(300)
-        .attr("opacity", 0.6)
-        .attr("r", 6 / currentZoomScale);
-    });
 
   // Plot data points
   let viewport = chartArea.append("g");
 
-  function computeOpacity(d) {
-    if (selectedCountry) {
-      return d.Country.toLowerCase().replace(/\s+/g, "") === selectedCountry
-        ? 1
-        : 0.07;
-    } else if (selectedContinent) {
-      return d.Continent === selectedContinent ? 0.6 : 0.07;
-    } else {
-      return 0.6;
-    }
-  }
+  // Line path
+  const line = d3
+    .line()
+    .x((d) => xScale(d.year))
+    .y((d) => yScale(d.UnemployedTotal))
+    .curve(d3.curveMonotoneX);
 
+  const linePath = chartArea
+    .append("path")
+    .data([aggregatedData])
+    .join("path")
+    .attr("class", "line")
+    .attr("d", line)
+    .style("stroke", "#393e8f") // Change line color to pink
+    .style("fill", "none")
+    .style("stroke-width", 2);
+
+  // Add circles on top of lines (ensure circles are on top)
   viewport
     .selectAll("circle")
-    .data(data)
+    .data(aggregatedData)
     .join("circle")
-    .attr("class", "point")
-    .attr("cx", (d) => xScale(d["happiness_score"]))
-    .attr("cy", (d) => yScale(d["2022_consumption"]))
-    .attr("r", 6)
-    .attr("opacity", 0.6)
-    .style("fill", (d) => colorScale(d.Continent))
+    .attr("cx", (d) => xScale(d.year))
+    .attr("cy", (d) => yScale(d.UnemployedTotal))
+    .attr("r", (d) => radiusScale(movieCountByYear[d.year]))
+    .attr("fill", (d) => colorScale(movieCountByYear[d.year]))
+    .attr("stroke", "#12194a")
+    .attr("stroke-width", 2)
+    .style("opacity", 1) // Adjust opacity for low values
     .on("mouseover", (event, d) => {
-      d3.select(event.currentTarget)
-        .transition()
-        .duration(200)
-        .attr("opacity", 1);
-      tooltip.transition().duration(300).style("opacity", 0.9);
+      const movieData = disneyData.filter((movie) => movie.year === d.year);
+      const topMovie =
+        movieData.length > 0 ? movieData[0].movie_title : "No movie";
+      const topMovieGenre =
+        movieData.length > 0 ? movieData[0].genre : "No movie";
+      tooltip.transition().duration(200).style("opacity", 1);
       tooltip
         .html(
-          `<b>Country:</b> ${d.Country}  <br> <b>Instant Noodle Consumption:</b> $${d["2022_consumption"]} million <br> <b>Happiness Score:</b> ${d["happiness_score"]}`
+          `Year: ${d.year}<br>Movies: ${
+            movieCountByYear[d.year]
+          }<br>Unemployed: ${
+            d.UnemployedTotal
+          }<br>Top Disney Movie: ${topMovie} <br>Genre: ${topMovieGenre}`
         )
-        .style("left", event.pageX + 20 + "px")
-        .style("top", event.pageY - 28 + "px");
+        .style("left", `${event.pageX + 20}px`)
+        .style("top", `${event.pageY - 28}px`);
     })
-    .on("mouseout", (event, d) => {
-      d3.select(event.currentTarget)
-        .transition()
-        .duration(300)
-        .attr("opacity", computeOpacity(d));
-      tooltip.transition().duration(500).style("opacity", 0);
-    });
+    .on("mouseout", () =>
+      tooltip.transition().duration(500).style("opacity", 0)
+    );
 
-  document.addEventListener("highlightCountry", (e) => {
-    const country = e.detail.country.toLowerCase().replace(/\s+/g, "");
-    selectedCountry = country;
+  chartArea.select(".line").lower();
 
-    const currentZoomScale = d3.zoomTransform(d3.select("#jade-svg").node()).k;
+  // Legend
+  const legendSvg = d3.select("#jade-legendSvg");
+  const legendWidth = 20;
+  const legendHeight = 200;
+  const legendGroup = legendSvg
+    .append("g")
+    .attr("class", "arthur-legend")
+    .attr("transform", `translate(60,50)`);
 
-    d3.selectAll(".point")
-      .transition()
-      .duration(300)
-      .attr("opacity", (d) => computeOpacity(d))
-      .attr("r", (d) =>
-        d.Country.toLowerCase().replace(/\s+/g, "") === selectedCountry
-          ? 10 / currentZoomScale
-          : 6 / currentZoomScale
-      );
-  });
-});
+  const gradient = legendSvg
+    .append("linearGradient")
+    .attr("id", "jade-legend-gradient")
+    .attr("x1", "0%")
+    .attr("x2", "0%")
+    .attr("y1", "0%")
+    .attr("y2", "100%");
+
+  // Apply the color scale to the gradient stops
+  gradient
+    .append("stop")
+    .attr("offset", "0%")
+    .attr("stop-color", colorScale(minMovies)); // Color at the start of the gradient
+
+  gradient
+    .append("stop")
+    .attr("offset", "100%")
+    .attr("stop-color", colorScale(maxMovies)); // Color at the end of the gradient
+
+  // Create the rectangle that will hold the gradient
+  const legendRect = legendGroup
+    .append("rect")
+    .attr("width", legendWidth)
+    .attr("height", legendHeight)
+    .style("fill", "url(#jade-legend-gradient)"); // Use the gradient for fill
+
+  // Create the scale and axis for the legend
+  const legendScale = d3
+    .scaleLinear()
+    .domain([minMovies, maxMovies]) // Replace with actual min and max values
+    .range([0, legendHeight]); // Adjust range based on the height of the legend
+
+  // Create the axis for the legend (vertical axis)
+  const legendAxis = d3
+    .axisRight(legendScale) // Use axisRight for vertical axis on the right side
+    .ticks(5) // Adjust the number of ticks
+    .tickFormat(d3.format(".0f")); // Adjust format as needed (e.g., integer formatting)
+
+  // Add the axis to the legend
+  const legendAxisGroup = legendGroup
+    .append("g")
+    .attr("transform", `translate(${legendWidth}, 0)`) // Position the axis to the right of the color scale
+    .call(legendAxis);
+
+  legendGroup
+    .append("text")
+    .attr("class", "arthur-legend-title")
+    .attr("x", legendWidth / 2)
+    .attr("y", -20)
+    .attr("text-anchor", "middle")
+    .text("Disney Movie Amount");
+}
+
+drawGraph();

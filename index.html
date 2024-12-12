@@ -11,7 +11,9 @@
   </head>
   <body>
     <h1>Alcohol Consumption and Unemployment in the U.S. (1977 - 2018)</h1>
-    <label for="dataType">Select Alcohol Consumption (shown in the tooltip):</label>
+    <label for="dataType"
+      >Select Alcohol Consumption (shown in the tooltip):</label
+    >
     <select id="dataType">
       <option value="ethanol_beer_gallons_per_capita">Beer Consumption</option>
       <option value="ethanol_wine_gallons_per_capita">Wine Consumption</option>
@@ -39,14 +41,14 @@
         <svg id="legendSvg" width="300" height="400"></svg>
       </div>
     </div>
-
+    <br /><br />
     <!-- Disney & unemployment chart -->
-    <div id="jade-div">
-      <div class="title-container">
-        <h3>Disney Movies vs Unemployment</h3>
+    <div id="jade-div" style="display: flex; align-items: start">
+      <svg width="1000" height="600" id="jade-svg"></svg>
+      <div id="jade-legendContainer">
+        <svg id="jade-legendSvg" width="160" height="400"></svg>
         <button id="reset-view" class="legend-button">Reset Zoom</button>
       </div>
-      <svg width="600" height="500" id="jade-svg"></svg>
     </div>
 
     <script src="Arthur.js"></script>
