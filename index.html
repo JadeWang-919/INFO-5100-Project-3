@@ -11,31 +11,34 @@
   </head>
   <body>
     <h1>Alcohol Consumption and Unemployment in the U.S. (1977 - 2018)</h1>
-    <label for="dataType"
-      >Select Alcohol Consumption (shown in the tooltip):</label
-    >
-    <select id="dataType">
-      <option value="ethanol_beer_gallons_per_capita">Beer Consumption</option>
-      <option value="ethanol_wine_gallons_per_capita">Wine Consumption</option>
-      <option value="ethanol_spirit_gallons_per_capita">
-        Spirit Consumption
-      </option>
-    </select>
 
-    <label for="yearSlider">Current Year:</label>
-    <input
-      type="range"
-      id="yearSlider"
-      min="1977"
-      max="2018"
-      step="1"
-      value="2018"
-    />
-    <span id="yearLabel">2018</span>
+    <div style="display: flex; align-items: center; gap: 5px;">
+      <label for="dataType"
+        >Alcohol Type: </label
+      >
+      <select id="dataType">
+        <option value="ethanol_beer_gallons_per_capita">Beer</option>
+        <option value="ethanol_wine_gallons_per_capita">Wine</option>
+        <option value="ethanol_spirit_gallons_per_capita">Spirit</option>
+      </select>
+
+      <label style="margin-left: 20px;" for="yearSlider">Year:</label>
+      <input
+          type="range"
+          id="yearSlider"
+          min="1977"
+          max="2018"
+          step="1"
+          value="2018"
+      />
+      <span id="yearLabel">2018</span>
+
+      <div style="margin-left: 20px;" id="alc-legend-container" style="display: flex; align-items: center;"></div>
+    </div>
 
     <div style="display: flex; align-items: start">
       <!-- US Map -->
-      <svg id="choropleth" width="960" height="600"></svg>
+      <svg id="choropleth" width="960" height="600" style="margin-top: 20px"></svg>
       <!-- Legend Container -->
       <div id="legendContainer" style="margin-left: 20px">
         <svg id="legendSvg" width="300" height="400"></svg>

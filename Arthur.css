@@ -23,3 +23,13 @@
     font-size: 14px;
     font-weight: bold;
   }
+  
+  input[type="range"] {
+    vertical-align: middle;
+    margin: 0;
+  }
+  
+  #alc-legend-container {
+    display: flex;
+    align-items: center;
+  }

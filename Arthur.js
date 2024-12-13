@@ -3,6 +3,7 @@
 const width = 960, height = 600;
 const svg = d3.select("#choropleth");
 const tooltip = d3.select("body").append("div").attr("class", "arthur-tooltip").style("visibility", "hidden");
+const threshold = 1.3; // Gallons per capita
 
 // For legend
 const legendSvg = d3.select("#legendSvg");
@@ -53,6 +54,44 @@ legendGroup.append("text")
   .attr("y", noDataY + 28)
   .attr("text-anchor", "middle")
   .text("No data");
+
+// Stripe pattern for high alcohol consumption
+const stripePattern = defs.append("pattern")
+    .attr("id", "stripe-pattern")
+    .attr("width", 10)
+    .attr("height", 10)
+    .attr("patternUnits", "userSpaceOnUse");
+  
+stripePattern.append("line")
+    .attr("x1", 0)
+    .attr("y1", 0)
+    .attr("x2", 10)
+    .attr("y2", 10)
+    .attr("stroke", "red")
+    .attr("stroke-width", 1)
+    .attr("stroke-opacity", 0.5);
+
+const alcLegendContainer = d3.select("#alc-legend-container");
+
+alcLegendContainer.append("svg")
+      .attr("width", 360)
+      .attr("height", 34)
+      .append("rect")
+      .attr("x", 10)
+      .attr("y", 10)
+      .attr("width", 20)
+      .attr("height", 15)
+      .attr("fill", "url(#stripe-pattern)");
+    
+ alcLegendContainer.select("svg")
+      .append("text")
+      .attr("class", "arthur-legend")
+      .attr("x", 40) 
+      .attr("y", 22) 
+      .text("High Alcohol Consumption (> 1.3 gal/person)")
+      .style("font-size", "14px");
+  
+  
 
 (async function loadAndVisualizeData() {
   const topoData = await d3.json("us-smaller.json");
@@ -118,17 +157,35 @@ legendGroup.append("text")
     const gLabels = svg.append("g").attr("class", "labels-group");
 
     gStates.selectAll(".arthur-state")
-      .data(states)
-      .join("path")
-      .attr("class", "arthur-state")
-      .attr("d", path)
-      .style("fill", d => {
-        const stateName = stateIdToName[d.id];
-        if (!stateName) return "#ccc"; 
-        return stateName.toLowerCase() in unemploymentByState
-          ? unemploymentColorScale(unemploymentByState[stateName.toLowerCase()])
-          : "#ccc";
-      })
+    .data(states)
+    .join("g")
+    .attr("class", "arthur-state")
+    .each(function (d) {
+      const stateName = stateIdToName[d.id]?.toLowerCase();
+  
+      const unemployment = unemploymentByState[stateName];
+      const alcohol = alcoholData.find(
+        record => record.state.toLowerCase() === stateName && record.year === selectedYear
+      )?.[selectedType];
+  
+      const unemploymentColor = unemploymentColorScale(unemployment || 0);
+  
+      const stateGroup = d3.select(this);
+  
+      stateGroup.append("path")
+        .attr("class", "state-base")
+        .attr("d", path(d))
+        .style("fill", unemploymentColor);
+  
+      if (alcohol > threshold) {
+        stateGroup.append("path")
+          .attr("class", "state-pattern")
+          .attr("d", path(d))
+          .style("fill", "url(#stripe-pattern)")
+      }
+    })
+  
+
       .on("mouseover", (event, d) => {
         const stateName = stateIdToName[d.id];
         if (!stateName) return;
