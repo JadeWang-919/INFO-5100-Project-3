@@ -58,6 +58,7 @@ legendGroup.append("text")
   const topoData = await d3.json("us-smaller.json");
   const alcoholData = await d3.csv("alcohol_consumption_1977_2018.csv", d3.autoType);
   const unemploymentData = await d3.csv("unemployment_by_state_1976_2018.csv", d3.autoType);
+  const stateData = await d3.csv("state-data.csv");
 
   const stateIdToName = {
     1: "Alabama", 2: "Alaska", 4: "Arizona", 5: "Arkansas", 6: "California",
@@ -72,6 +73,11 @@ legendGroup.append("text")
     46: "South Dakota", 47: "Tennessee", 48: "Texas", 49: "Utah", 50: "Vermont",
     51: "Virginia", 53: "Washington", 54: "West Virginia", 55: "Wisconsin", 56: "Wyoming"
   };
+
+  const stateLookup = {};
+  stateData.forEach(d => {
+    stateLookup[d.State.toLowerCase()] = d.Code;
+  });
 
   const projection = d3.geoAlbersUsa().fitSize([width, height], topojson.feature(topoData, topoData.objects.states));
   const path = d3.geoPath().projection(projection);
@@ -88,6 +94,7 @@ legendGroup.append("text")
     "ethanol_wine_gallons_per_capita": "Wine consumption",
     "ethanol_spirit_gallons_per_capita": "Spirit consumption"
   };
+
 
   function updateMap(selectedYear, selectedType) {
     // Filter unemployment data by year
@@ -107,7 +114,10 @@ legendGroup.append("text")
     // Update color scale domain based on this year's data
     unemploymentColorScale.domain([actualMin, actualMax]);
 
-    svg.selectAll(".arthur-state")
+    const gStates = svg.append("g").attr("class", "states-group");
+    const gLabels = svg.append("g").attr("class", "labels-group");
+
+    gStates.selectAll(".arthur-state")
       .data(states)
       .join("path")
       .attr("class", "arthur-state")
@@ -130,7 +140,7 @@ legendGroup.append("text")
         d3.select(event.currentTarget)
           .raise()
           .style("stroke", "black")
-          .style("stroke-width", "3px");
+          .style("stroke-width", "1px");
 
         const unemploymentRate = unemploymentByState[stateName.toLowerCase()];
         const selectedConsumptionLabel = consumptionLabels[selectedType];
@@ -159,7 +169,24 @@ legendGroup.append("text")
       });
 
     updateLegend(actualMin, actualMax);
+
+      // Add state codes as text labels
+      gLabels.selectAll(".state-code")
+      .data(states)
+      .join("text")
+      .attr("class", "state-code")
+      .attr("x", d => path.centroid(d)[0])
+      .attr("y", d => path.centroid(d)[1])
+      .attr("text-anchor", "middle")
+      .attr("dy", "0.35em")
+      .text(d => {
+        const stateName = stateIdToName[d.id]?.toLowerCase();
+        return stateLookup[stateName] || "";
+      })
+      .style("font-size", "10px")
+      .style("fill", "black");
   }
+
 
   function updateLegend(minVal, maxVal) {
     // Update gradient stops
