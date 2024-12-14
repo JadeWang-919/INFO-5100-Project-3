@@ -1,0 +1,67 @@
+#jade-div {
+  width: 1170px;
+  display: flex;
+  align-items: flex-start; /* Align children to the top */
+}
+
+
+#jade-legendContainer {
+  display: flex;
+  flex-direction: column; /* Stack children vertically */
+  justify-content: flex-start; /* Align items to the top */
+  align-items: center; /* Center the items horizontally */
+}
+
+.legend-button {
+  margin-top: 10px; /* Add some spacing between the SVG and the button */
+  align-self: center; /* Make sure the button is centered horizontally */
+}
+
+.gridlines line {
+  stroke: #bbb;
+}
+
+.gridlines .domain {
+  stroke: none;
+}
+
+#legend {
+  display: flex;
+  justify-content: center ;
+  gap: 30px;
+  margin-bottom: 50px;
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+}
+
+.legend-item span {
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  margin-right: 8px;
+  border-radius: 400px;
+}
+
+.legend-blue {
+  background-color: #5db5f0;
+}
+
+.legend-red {
+  background-color: #ba4227;
+}
+
+.tooltip {
+    position: absolute;
+    text-align: center;
+    padding: 6px;
+    font-size: 12px;
+    background: #333;
+    color: #fff;
+    border-radius: 4px;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.2s ease-in-out;
+}

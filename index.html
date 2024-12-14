@@ -1,60 +1,146 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>alcohol vs unemployment</title>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Alcohol vs. Unemployment</title>
     <script src="https://d3js.org/d3.v7.min.js"></script>
     <script src="https://unpkg.com/topojson-client"></script>
-    <link rel="stylesheet" href="Arthur.css" />
-    <link rel="stylesheet" href="Jade.css" />
-  </head>
-  <body>
+    <link rel="stylesheet" href="Arthur.css">
+    <link rel="stylesheet" href="Jade.css">
+    <link rel="stylesheet" href="Xuyuan.css">
+</head>
+<body>
     <h1>Alcohol Consumption and Unemployment in the U.S. (1977 - 2018)</h1>
 
-    <div style="display: flex; align-items: center; gap: 5px;">
-      <label for="dataType"
-        >Alcohol Type: </label
-      >
-      <select id="dataType">
-        <option value="ethanol_beer_gallons_per_capita">Beer</option>
-        <option value="ethanol_wine_gallons_per_capita">Wine</option>
-        <option value="ethanol_spirit_gallons_per_capita">Spirit</option>
-      </select>
+    <!-- Controls Section -->
+    <div style="display: flex; align-items: center; gap: 10px;">
+        <label for="dataType">Alcohol Type:</label>
+        <select id="dataType">
+            <option value="ethanol_beer_gallons_per_capita">Beer</option>
+            <option value="ethanol_wine_gallons_per_capita">Wine</option>
+            <option value="ethanol_spirit_gallons_per_capita">Spirit</option>
+        </select>
 
-      <label style="margin-left: 20px;" for="yearSlider">Year:</label>
-      <input
-          type="range"
-          id="yearSlider"
-          min="1977"
-          max="2018"
-          step="1"
-          value="2018"
-      />
-      <span id="yearLabel">2018</span>
+        <label style="margin-left: 20px;" for="yearSlider">Year:</label>
+        <input
+            type="range"
+            id="yearSlider"
+            min="1977"
+            max="2018"
+            step="1"
+            value="2018"
+        />
+        <span id="yearLabel">2018</span>
 
-      <div style="margin-left: 20px;" id="alc-legend-container" style="display: flex; align-items: center;"></div>
+        <!-- Alcohol Legend -->
+        <div id="alc-legend-container" style="margin-left: 20px;"></div>
     </div>
 
-    <div style="display: flex; align-items: start">
-      <!-- US Map -->
-      <svg id="choropleth" width="960" height="600" style="margin-top: 20px"></svg>
-      <!-- Legend Container -->
-      <div id="legendContainer" style="margin-left: 20px">
-        <svg id="legendSvg" width="300" height="400"></svg>
+    <!-- US Map and Legend -->
+    <div style="display: flex; align-items: flex-start; margin-top: 20px;">
+        <svg id="choropleth" width="960" height="600"></svg>
+        <div id="legendContainer" style="margin-left: 20px;">
+            <svg id="legendSvg" width="300" height="400"></svg>
+        </div>
+    </div>
+
+    <!-- Disney vs Unemployment Chart -->
+    <div id="jade-div" style="display: flex; align-items: flex-start; margin-top: 20px;">
+        <svg id="jade-svg" width="1000" height="600"></svg>
+        <div id="jade-legendContainer">
+            <svg id="jade-legendSvg" width="160" height="400"></svg>
+            <button id="reset-view" class="legend-button">Reset Zoom</button>
+        </div>
+    </div>
+
+
+
+    <!-- Time-Series Chart Section -->
+    <h1 id="chart-title">Unemployment vs Ethanol Consumption in US (1977-2018)</h1>
+    <div id="time-series-section" style="margin-top: 20px;">
+        <!-- State Selector -->
+        <div id="state-selector">
+            <label for="state-select">Select a State:</label>
+            <select id="state-select">
+                <option value="alabama">Alabama</option>
+                <option value="alaska">Alaska</option>
+                <option value="arizona">Arizona</option>
+                <option value="arkansas">Arkansas</option>
+                <option value="california">California</option>
+                <option value="colorado">Colorado</option>
+                <option value="connecticut">Connecticut</option>
+                <option value="delaware">Delaware</option>
+                <option value="florida">Florida</option>
+                <option value="georgia">Georgia</option>
+                <option value="hawaii">Hawaii</option>
+                <option value="idaho">Idaho</option>
+                <option value="illinois">Illinois</option>
+                <option value="indiana">Indiana</option>
+                <option value="iowa">Iowa</option>
+                <option value="kansas">Kansas</option>
+                <option value="kentucky">Kentucky</option>
+                <option value="louisiana">Louisiana</option>
+                <option value="maine">Maine</option>
+                <option value="maryland">Maryland</option>
+                <option value="massachusetts">Massachusetts</option>
+                <option value="michigan">Michigan</option>
+                <option value="minnesota">Minnesota</option>
+                <option value="mississippi">Mississippi</option>
+                <option value="missouri">Missouri</option>
+                <option value="montana">Montana</option>
+                <option value="nebraska">Nebraska</option>
+                <option value="nevada">Nevada</option>
+                <option value="new_hampshire">New Hampshire</option>
+                <option value="new_jersey">New Jersey</option>
+                <option value="new_mexico">New Mexico</option>
+                <option value="new_york">New York</option>
+                <option value="north_carolina">North Carolina</option>
+                <option value="north_dakota">North Dakota</option>
+                <option value="ohio">Ohio</option>
+                <option value="oklahoma">Oklahoma</option>
+                <option value="oregon">Oregon</option>
+                <option value="pennsylvania">Pennsylvania</option>
+                <option value="rhode_island">Rhode Island</option>
+                <option value="south_carolina">South Carolina</option>
+                <option value="south_dakota">South Dakota</option>
+                <option value="tennessee">Tennessee</option>
+                <option value="texas">Texas</option>
+                <option value="utah">Utah</option>
+                <option value="vermont">Vermont</option>
+                <option value="virginia">Virginia</option>
+                <option value="washington">Washington</option>
+                <option value="west_virginia">West Virginia</option>
+                <option value="wisconsin">Wisconsin</option>
+                <option value="wyoming">Wyoming</option>
+            </select>
+        </div>
+    <!-- Legend -->
+    <div id="legend">
+      <div class="legend-item">
+          <span class="legend-blue"></span>
+          <span>Unemployment Rate (%)</span>
       </div>
-    </div>
-    <br /><br />
-    <!-- Disney & unemployment chart -->
-    <div id="jade-div" style="display: flex; align-items: start">
-      <svg width="1000" height="600" id="jade-svg"></svg>
-      <div id="jade-legendContainer">
-        <svg id="jade-legendSvg" width="160" height="400"></svg>
-        <button id="reset-view" class="legend-button">Reset Zoom</button>
+      <b></b>
+      <b></b>
+      <b></b>
+
+      <div class="legend-item">
+          <span class="legend-red"></span>
+          <span>Ethanol Consumption(Gallons per Capita)</span>
       </div>
+  </div>
+<button id="reset-view">Reset Zoom</button>
+
+        <!-- Time-Series Chart -->
+        <div id="time-series-chart">
+            <svg id="time-series-svg" width="1000" height="600"></svg>
+        </div>
     </div>
 
+    <!-- Scripts -->
     <script src="Arthur.js"></script>
     <script src="Jade.js"></script>
-  </body>
+    <script src="Xuyuan.js"></script>
+</body>
 </html>
