@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -53,90 +53,52 @@
             <button id="reset-view" class="legend-button">Reset Zoom</button>
         </div>
     </div>
+  <div id="time-series-section">
+    <!-- Chart -->
+    <div id="time-series-chart">
+        <svg id="time-series-svg" width="1000" height="600"></svg>
+    </div>
 
+    <div id="controls-container">
+        <!-- Main controls row -->
+        <div id="main-controls">
+            <!-- State Selector -->
+            <div id="state-selector">
+                <label for="state-select">Select a State:</label>
+                <select id="state-select"></select>
+            </div>
 
+            <!-- Optional: Year Selector (remove if not needed) -->
+            <div id="year-selector">
+                <label for="year-select">Select a Year:</label>
+                <select id="year-select">
+                    <!-- Example years (remove if not needed) -->
+                    <option value="2000">2000</option>
+                    <option value="2005">2005</option>
+                    <option value="2010">2010</option>
+                    <option value="2015">2015</option>
+                </select>
+            </div>
 
-    <!-- Time-Series Chart Section -->
-    <h1 id="chart-title">Unemployment vs Ethanol Consumption in US (1977-2018)</h1>
-    <div id="time-series-section" style="margin-top: 20px;">
-        <!-- State Selector -->
-        <div id="state-selector">
-            <label for="state-select">Select a State:</label>
-            <select id="state-select">
-                <option value="alabama">Alabama</option>
-                <option value="alaska">Alaska</option>
-                <option value="arizona">Arizona</option>
-                <option value="arkansas">Arkansas</option>
-                <option value="california">California</option>
-                <option value="colorado">Colorado</option>
-                <option value="connecticut">Connecticut</option>
-                <option value="delaware">Delaware</option>
-                <option value="florida">Florida</option>
-                <option value="georgia">Georgia</option>
-                <option value="hawaii">Hawaii</option>
-                <option value="idaho">Idaho</option>
-                <option value="illinois">Illinois</option>
-                <option value="indiana">Indiana</option>
-                <option value="iowa">Iowa</option>
-                <option value="kansas">Kansas</option>
-                <option value="kentucky">Kentucky</option>
-                <option value="louisiana">Louisiana</option>
-                <option value="maine">Maine</option>
-                <option value="maryland">Maryland</option>
-                <option value="massachusetts">Massachusetts</option>
-                <option value="michigan">Michigan</option>
-                <option value="minnesota">Minnesota</option>
-                <option value="mississippi">Mississippi</option>
-                <option value="missouri">Missouri</option>
-                <option value="montana">Montana</option>
-                <option value="nebraska">Nebraska</option>
-                <option value="nevada">Nevada</option>
-                <option value="new_hampshire">New Hampshire</option>
-                <option value="new_jersey">New Jersey</option>
-                <option value="new_mexico">New Mexico</option>
-                <option value="new_york">New York</option>
-                <option value="north_carolina">North Carolina</option>
-                <option value="north_dakota">North Dakota</option>
-                <option value="ohio">Ohio</option>
-                <option value="oklahoma">Oklahoma</option>
-                <option value="oregon">Oregon</option>
-                <option value="pennsylvania">Pennsylvania</option>
-                <option value="rhode_island">Rhode Island</option>
-                <option value="south_carolina">South Carolina</option>
-                <option value="south_dakota">South Dakota</option>
-                <option value="tennessee">Tennessee</option>
-                <option value="texas">Texas</option>
-                <option value="utah">Utah</option>
-                <option value="vermont">Vermont</option>
-                <option value="virginia">Virginia</option>
-                <option value="washington">Washington</option>
-                <option value="west_virginia">West Virginia</option>
-                <option value="wisconsin">Wisconsin</option>
-                <option value="wyoming">Wyoming</option>
-            </select>
+            <!-- Reset Zoom Button -->
+            <button id="reset-view">Reset Zoom</button>
         </div>
-    <!-- Legend -->
-    <div id="legend">
-      <div class="legend-item">
-          <span class="legend-blue"></span>
-          <span>Unemployment Rate (%)</span>
-      </div>
-      <b></b>
-      <b></b>
-      <b></b>
 
-      <div class="legend-item">
-          <span class="legend-red"></span>
-          <span>Ethanol Consumption(Gallons per Capita)</span>
-      </div>
-  </div>
-<button id="reset-view">Reset Zoom</button>
-
-        <!-- Time-Series Chart -->
-        <div id="time-series-chart">
-            <svg id="time-series-svg" width="1000" height="600"></svg>
+        <!-- Legend -->
+        <div id="legend">
+            <div class="legend-item">
+                <span class="legend-blue"></span>
+                <span>Unemployment Rate (%)</span>
+            </div>
+            <div class="legend-item">
+                <span class="legend-red"></span>
+                <span>Ethanol Consumption (Gallons per Capita)</span>
+            </div>
         </div>
     </div>
+
+    <div id="loading-message" style="text-align:center; margin-top:20px;">Loading data, please wait...</div>
+</div>
 
     <!-- Scripts -->
     <script src="Arthur.js"></script>

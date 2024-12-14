@@ -211,6 +211,7 @@ alcLegendContainer.append("svg")
             Unemployment Rate: ${unemploymentRate != null ? unemploymentRate.toFixed(1) + '%' : 'No data'}<br>
             ${selectedConsumptionLabel}: ${formattedValue}
           `);
+          window.updateStateChart(stateName.toLowerCase());
       })
       .on("mousemove", event => {
         tooltip

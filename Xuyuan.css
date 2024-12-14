@@ -1,35 +1,44 @@
-#jade-div {
-  width: 1170px;
+body {
+  font-family: Arial, sans-serif;
+}
+
+#time-series-section {
+  margin-top: 20px;
+}
+
+#time-series-chart {
   display: flex;
-  align-items: flex-start; /* Align children to the top */
+  justify-content: center;
+  margin-bottom: 20px;
 }
 
-
-#jade-legendContainer {
+/* Container for all controls */
+#controls-container {
   display: flex;
-  flex-direction: column; /* Stack children vertically */
-  justify-content: flex-start; /* Align items to the top */
-  align-items: center; /* Center the items horizontally */
+  flex-direction: column;
+  align-items: center;
+  gap: 15px;
 }
 
-.legend-button {
-  margin-top: 10px; /* Add some spacing between the SVG and the button */
-  align-self: center; /* Make sure the button is centered horizontally */
+/* Row of main controls */
+#main-controls {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 30px;
 }
 
-.gridlines line {
-  stroke: #bbb;
-}
-
-.gridlines .domain {
-  stroke: none;
+#state-selector,
+#year-selector {
+  display: flex;
+  align-items: center;
+  gap: 5px;
 }
 
 #legend {
   display: flex;
-  justify-content: center ;
-  gap: 30px;
-  margin-bottom: 50px;
+  justify-content: center;
+  gap: 100px;
 }
 
 .legend-item {
@@ -41,7 +50,7 @@
   display: inline-block;
   width: 20px;
   height: 20px;
-  margin-right: 8px;
+  margin-right: 10px;
   border-radius: 400px;
 }
 
@@ -53,15 +62,31 @@
   background-color: #ba4227;
 }
 
+#reset-view {
+  padding: 5px 10px;
+  cursor: pointer;
+}
+
 .tooltip {
-    position: absolute;
-    text-align: center;
-    padding: 6px;
-    font-size: 12px;
-    background: #333;
-    color: #fff;
-    border-radius: 4px;
-    pointer-events: none;
-    opacity: 0;
-    transition: opacity 0.2s ease-in-out;
+  position: absolute;
+  text-align: center;
+  padding: 6px;
+  font-size: 12px;
+  background: #333;
+  color: #fff;
+  border-radius: 4px;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.2s ease-in-out;
+  z-index: 9999;
+}
+
+.grid line {
+  stroke: #bbb;
+  stroke-opacity: 0.7;
+  shape-rendering: crispEdges;
+}
+
+.grid path {
+  stroke: none;
 }
