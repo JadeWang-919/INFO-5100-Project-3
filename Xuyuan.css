@@ -38,7 +38,9 @@ body {
 #legend {
   display: flex;
   justify-content: center;
-  gap: 100px;
+  align-items: center;
+  gap: 50px;
+  margin: 0 auto;
 }
 
 .legend-item {
@@ -51,7 +53,7 @@ body {
   width: 20px;
   height: 20px;
   margin-right: 10px;
-  border-radius: 400px;
+  border-radius: 50%;
 }
 
 .legend-blue {
