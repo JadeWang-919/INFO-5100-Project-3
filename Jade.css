@@ -1,3 +1,14 @@
+.center-content {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+#world-map,
+#jade-div {
+  width: fit-content; /* Ensure the content sizes dynamically */
+}
+
 #jade-div {
   width: 1170px;
   display: flex;
