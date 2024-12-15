@@ -329,7 +329,7 @@ async function drawGraph() {
   legendGroup
     .append("text")
     .attr("class", "arthur-legend-title")
-    .attr("x", legendWidth / 2)
+    .attr("x", legendWidth / 2 + 2)
     .attr("y", -20)
     .attr("text-anchor", "middle")
     .text("Disney Movie Amount");

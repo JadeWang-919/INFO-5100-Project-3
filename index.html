@@ -1,108 +1,113 @@
 <<!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Alcohol vs. Unemployment</title>
     <script src="https://d3js.org/d3.v7.min.js"></script>
     <script src="https://unpkg.com/topojson-client"></script>
-    <link rel="stylesheet" href="Arthur.css">
-    <link rel="stylesheet" href="Jade.css">
-    <link rel="stylesheet" href="Xuyuan.css">
-</head>
-<body>
+    <link rel="stylesheet" href="Arthur.css" />
+    <link rel="stylesheet" href="Jade.css" />
+    <link rel="stylesheet" href="Xuyuan.css" />
+  </head>
+  <body>
     <h1>Will Alcohol OR Disney Movie Better Save the world? (1977 - 2018)</h1>
 
     <!-- Controls Section -->
-    <div style="display: flex; align-items: center; gap: 10px;">
-        <label for="dataType">Alcohol Type:</label>
-        <select id="dataType">
-            <option value="ethanol_beer_gallons_per_capita">Beer</option>
-            <option value="ethanol_wine_gallons_per_capita">Wine</option>
-            <option value="ethanol_spirit_gallons_per_capita">Spirit</option>
-        </select>
+    <div style="display: flex; align-items: center; gap: 10px">
+      <label for="dataType">Alcohol Type:</label>
+      <select id="dataType">
+        <option value="ethanol_beer_gallons_per_capita">Beer</option>
+        <option value="ethanol_wine_gallons_per_capita">Wine</option>
+        <option value="ethanol_spirit_gallons_per_capita">Spirit</option>
+      </select>
 
-        <label style="margin-left: 20px;" for="yearSlider">Year:</label>
-        <input
-            type="range"
-            id="yearSlider"
-            min="1977"
-            max="2018"
-            step="1"
-            value="2018"
-        />
-        <span id="yearLabel">2018</span>
+      <label style="margin-left: 20px" for="yearSlider">Year:</label>
+      <input
+        type="range"
+        id="yearSlider"
+        min="1977"
+        max="2018"
+        step="1"
+        value="2018"
+      />
+      <span id="yearLabel">2018</span>
 
-        <!-- Alcohol Legend -->
-        <div id="alc-legend-container" style="margin-left: 20px;"></div>
+      <!-- Alcohol Legend -->
+      <div id="alc-legend-container" style="margin-left: 20px"></div>
     </div>
 
     <!-- US Map and Legend -->
-    <div style="display: flex; align-items: flex-start; margin-top: 20px;">
-        <svg id="choropleth" width="960" height="600"></svg>
-        <div id="legendContainer" style="margin-left: 20px;">
-            <svg id="legendSvg" width="300" height="400"></svg>
-        </div>
+    <div style="display: flex; align-items: flex-start; margin-top: 20px">
+      <svg id="choropleth" width="960" height="600"></svg>
+      <div id="legendContainer" style="margin-left: 20px">
+        <svg id="legendSvg" width="300" height="400"></svg>
+      </div>
     </div>
 
     <!-- Disney vs Unemployment Chart -->
-    <div id="jade-div" style="display: flex; align-items: flex-start; margin-top: 20px;">
-        <svg id="jade-svg" width="1000" height="600"></svg>
-        <div id="jade-legendContainer">
-            <svg id="jade-legendSvg" width="160" height="400"></svg>
-            <button id="reset-view" class="legend-button">Reset Zoom</button>
-        </div>
+    <div
+      id="jade-div"
+      style="display: flex; align-items: flex-start; margin-top: 20px"
+    >
+      <svg id="jade-svg" width="1000" height="600"></svg>
+      <div id="jade-legendContainer">
+        <svg id="jade-legendSvg" width="165" height="400"></svg>
+        <button id="reset-view" class="legend-button">Reset Zoom</button>
+      </div>
     </div>
-  <div id="time-series-section">
-    <!-- Chart -->
-    <div id="time-series-chart">
+    <div id="time-series-section">
+      <!-- Chart -->
+      <div id="time-series-chart">
         <svg id="time-series-svg" width="1000" height="600"></svg>
-    </div>
+      </div>
 
-    <div id="controls-container">
+      <div id="controls-container">
         <!-- Main controls row -->
         <div id="main-controls">
-            <!-- State Selector -->
-            <div id="state-selector">
-                <label for="state-select">Select a State:</label>
-                <select id="state-select"></select>
-            </div>
+          <!-- State Selector -->
+          <div id="state-selector">
+            <label for="state-select">Select a State:</label>
+            <select id="state-select"></select>
+          </div>
 
-            <!-- Optional: Year Selector (remove if not needed) -->
-            <div id="year-selector">
-                <label for="year-select">Select a Year:</label>
-                <select id="year-select">
-                    <!-- Example years (remove if not needed) -->
-                    <option value="2000">2000</option>
-                    <option value="2005">2005</option>
-                    <option value="2010">2010</option>
-                    <option value="2015">2015</option>
-                </select>
-            </div>
+          <!-- Optional: Year Selector (remove if not needed) -->
+          <div id="year-selector">
+            <label for="year-select">Select a Year:</label>
+            <select id="year-select">
+              <!-- Example years (remove if not needed) -->
+              <option value="2000">2000</option>
+              <option value="2005">2005</option>
+              <option value="2010">2010</option>
+              <option value="2015">2015</option>
+            </select>
+          </div>
 
-            <!-- Reset Zoom Button -->
-            <button id="reset-view">Reset Zoom</button>
+          <!-- Reset Zoom Button -->
+          <button id="reset-view">Reset Zoom</button>
         </div>
 
         <!-- Legend -->
         <div id="legend">
-            <div class="legend-item">
-                <span class="legend-blue"></span>
-                <span>Unemployment Rate (%)</span>
-            </div>
-            <div class="legend-item">
-                <span class="legend-red"></span>
-                <span>Ethanol Consumption (Gallons per Capita)</span>
-            </div>
+          <div class="legend-item">
+            <span class="legend-blue"></span>
+            <span>Unemployment Rate (%)</span>
+          </div>
+          <div class="legend-item">
+            <span class="legend-red"></span>
+            <span>Ethanol Consumption (Gallons per Capita)</span>
+          </div>
         </div>
-    </div>
+      </div>
 
-    <div id="loading-message" style="text-align:center; margin-top:20px;">Loading data, please wait...</div>
-</div>
+      <div id="loading-message" style="text-align: center; margin-top: 20px">
+        Loading data, please wait...
+      </div>
+    </div>
 
     <!-- Scripts -->
     <script src="Arthur.js"></script>
     <script src="Jade.js"></script>
     <script src="Xuyuan.js"></script>
-</body>
+  </body>
 </html>
