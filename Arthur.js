@@ -228,17 +228,26 @@ alcLegendContainer.append("svg")
 
     updateLegend(actualMin, actualMax);
 
-      // Add state codes as text labels
+      // Add state codes for easier recognition
       gLabels.selectAll(".state-code")
       .data(states)
       .join("text")
       .attr("class", "state-code")
-      .attr("x", d => path.centroid(d)[0])
-      .attr("y", d => path.centroid(d)[1])
+      .attr("x", d => {
+        const centroid = path.centroid(d);
+        return centroid && !isNaN(centroid[0]) ? centroid[0] : 0;
+      })
+      .attr("y", d => {
+        const centroid = path.centroid(d);
+        return centroid && !isNaN(centroid[1]) ? centroid[1] : 0;
+      })
       .attr("text-anchor", "middle")
       .attr("dy", "0.35em")
       .text(d => {
         const stateName = stateIdToName[d.id]?.toLowerCase();
+        if (stateName === "district of columbia") {
+          return "";
+        }
         return stateLookup[stateName] || "";
       })
       .style("font-size", "10px")
