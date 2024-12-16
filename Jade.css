@@ -1,3 +1,19 @@
+button {
+  border: 3px solid #a0c4ff;
+  border-radius: 10px;
+  background-color: white;
+  color: #333;
+  padding: 5px 10px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, border-color 0.3s ease;
+}
+
+button:hover {
+  background-color: #f0f0f0;
+  border-color: #6e9aeb;
+}
+
 .center-content {
   display: flex;
   justify-content: center;

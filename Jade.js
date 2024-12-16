@@ -193,7 +193,7 @@ async function drawGraph() {
 
   // Reset zoom
   function resetZoom() {
-    svg.transition().call(chartZoom.transform, d3.zoomIdentity);
+    svg.transition().duration(750).call(chartZoom.transform, d3.zoomIdentity);
   }
   document.getElementById("reset-view").addEventListener("click", resetZoom);
 
@@ -250,7 +250,7 @@ async function drawGraph() {
 
       tooltip.transition().duration(200).style("opacity", 1);
 
-      let tooltipContent = `Year: ${d.year}<br>Movies: ${
+      let tooltipContent = `Year: ${d.year}<br>Disney Movies: ${
         movieCountByYear[d.year]
       }<br>Unemployed: ${d.UnemployedTotal}`;
 
@@ -259,7 +259,7 @@ async function drawGraph() {
       }
 
       if (topMovieGenre) {
-        tooltipContent += `<br>Genre: ${topMovieGenre}`;
+        tooltipContent += `<br>Genre of Top Movie: ${topMovieGenre}`;
       }
 
       tooltip
@@ -294,12 +294,12 @@ async function drawGraph() {
   gradient
     .append("stop")
     .attr("offset", "0%")
-    .attr("stop-color", colorScale(minMovies)); // Color at the start of the gradient
+    .attr("stop-color", colorScale(minMovies));
 
   gradient
     .append("stop")
     .attr("offset", "100%")
-    .attr("stop-color", colorScale(maxMovies)); // Color at the end of the gradient
+    .attr("stop-color", colorScale(maxMovies));
 
   // Create the rectangle that will hold the gradient
   const legendRect = legendGroup
@@ -311,28 +311,73 @@ async function drawGraph() {
   // Create the scale and axis for the legend
   const legendScale = d3
     .scaleLinear()
-    .domain([minMovies, maxMovies]) // Replace with actual min and max values
-    .range([0, legendHeight]); // Adjust range based on the height of the legend
+    .domain([minMovies, maxMovies])
+    .range([0, legendHeight]);
 
   // Create the axis for the legend (vertical axis)
   const legendAxis = d3
-    .axisRight(legendScale) // Use axisRight for vertical axis on the right side
-    .ticks(5) // Adjust the number of ticks
-    .tickFormat(d3.format(".0f")); // Adjust format as needed (e.g., integer formatting)
+    .axisRight(legendScale)
+    .ticks(5)
+    .tickFormat(d3.format(".0f"));
 
   // Add the axis to the legend
   const legendAxisGroup = legendGroup
     .append("g")
-    .attr("transform", `translate(${legendWidth}, 0)`) // Position the axis to the right of the color scale
+    .attr("transform", `translate(${legendWidth}, 0)`)
     .call(legendAxis);
 
   legendGroup
     .append("text")
     .attr("class", "arthur-legend-title")
-    .attr("x", legendWidth / 2 + 2)
+    .attr("x", 60)
     .attr("y", -20)
     .attr("text-anchor", "middle")
-    .text("Disney Movie Amount");
+    .text("Disney Movie Amount 🎥");
+
+  // Circle Size Legend
+  const sizeLegendGroup = legendGroup
+    .append("g")
+    .attr("class", "circle-size-legend")
+    .attr("transform", `translate(60, 0)`);
+
+  const circleSizes = [
+    radiusScale(0),
+    radiusScale(maxMovies / 4),
+    radiusScale(maxMovies / 2),
+    radiusScale((3 * maxMovies) / 4),
+    radiusScale(maxMovies),
+  ];
+
+  const sizeValues = [
+    0,
+    Math.round(maxMovies / 4),
+    Math.round(maxMovies / 2),
+    Math.round((3 * maxMovies) / 4),
+    maxMovies,
+  ];
+
+  sizeLegendGroup
+    .selectAll("circle")
+    .data(circleSizes)
+    .enter()
+    .append("circle")
+    .attr("cy", (d, i) => i * 45 + 5)
+    .attr("cx", 30)
+    .attr("r", (d) => d)
+    .style("fill", "none")
+    .style("stroke", "#3c61a4")
+    .style("stroke-width", 1.5);
+
+  sizeLegendGroup
+    .selectAll("text")
+    .data(sizeValues)
+    .enter()
+    .append("text")
+    .attr("x", 50)
+    .attr("y", (d, i) => i * 45 + 10)
+    .attr("text-anchor", "start")
+    .attr("font-size", "10px")
+    .text((d) => d);
 }
 
 drawGraph();

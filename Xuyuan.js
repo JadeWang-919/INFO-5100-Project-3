@@ -358,7 +358,7 @@ document.addEventListener("DOMContentLoaded", async function () {
     chartArea.append(() => yAxisRightGroup.node());
   }
 
-  d3.select("#reset-view").on("click", () => {
+  d3.select("#reset-view-xuyuan").on("click", () => {
     svg.transition().duration(750).call(zoom.transform, d3.zoomIdentity);
   });
 
