@@ -114,7 +114,7 @@ async function drawGraph() {
     .attr("y", margin.top + chartHeight + 40)
     .attr("text-anchor", "middle")
     .style("font-weight", "bold")
-    .style("font-size", "14px")
+    .style("font-size", "15px")
     .text("Year");
 
   let yAxis = d3.axisLeft(yScale);
@@ -140,7 +140,7 @@ async function drawGraph() {
     .attr("y", margin.left / 2 - 15)
     .attr("text-anchor", "middle")
     .style("font-weight", "bold")
-    .style("font-size", "14px")
+    .style("font-size", "15px")
     .text("Unemployment Population in US");
 
   const tooltip = d3
