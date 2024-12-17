@@ -41,13 +41,15 @@ async function drawGraph() {
 
   let minMovies = Infinity;
   let maxMovies = -Infinity;
+
+  // Find min and max number of movies
   for (let year in movieCountByYear) {
     let count = movieCountByYear[year];
     if (count < minMovies) minMovies = count;
     if (count > maxMovies) maxMovies = count;
   }
 
-  // Function to aggregate "UnemployedTotal" by year
+  // Aggregate total unemployment by year
   function aggregateUnemployment(data) {
     return data.reduce((acc, curr) => {
       const unemployed = Number(curr["Unemployed - Total"]);
@@ -88,10 +90,7 @@ async function drawGraph() {
     .scaleSequential(d3.interpolateBlues)
     .domain([minMovies, maxMovies]);
 
-  const radiusScale = d3
-    .scaleLinear()
-    .domain([0, maxMovies]) // Adjust this range
-    .range([4, 12]); // Minimum and maximum radius for circles
+  const radiusScale = d3.scaleLinear().domain([0, maxMovies]).range([4, 12]); // Minimum and maximum radius for circles
 
   // Axes & Gridlines
   let xAxis = d3.axisBottom(xScale).tickFormat(d3.format("d"));
@@ -115,7 +114,7 @@ async function drawGraph() {
     .attr("y", margin.top + chartHeight + 40)
     .attr("text-anchor", "middle")
     .style("font-weight", "bold")
-    .style("font-size", "13px")
+    .style("font-size", "14px")
     .text("Year");
 
   let yAxis = d3.axisLeft(yScale);
@@ -141,19 +140,18 @@ async function drawGraph() {
     .attr("y", margin.left / 2 - 15)
     .attr("text-anchor", "middle")
     .style("font-weight", "bold")
-    .style("font-size", "13px")
+    .style("font-size", "14px")
     .text("Unemployment Population in US");
 
-  // Tooltip
   const tooltip = d3
     .select("#jade-div")
     .append("div")
     .attr("class", "arthur-tooltip")
     .style("opacity", 0);
 
-  // Adjust zoom target
+  // Set up zoom behavior
   const chartZoom = d3.zoom().scaleExtent([1, 5]).on("zoom", chartZoomed);
-  svg.call(chartZoom); // Apply zoom to chartArea
+  svg.call(chartZoom);
 
   function chartZoomed(event) {
     viewport.attr("transform", event.transform);
@@ -171,7 +169,7 @@ async function drawGraph() {
     d3.select("g.x.gridlines").call(xGridlines);
     d3.select("g.y.gridlines").call(yGridlines);
 
-    // Update circles' positions and sizes
+    // Update circle radius and stroke width
     viewport
       .selectAll("circle")
       .attr(
@@ -191,7 +189,6 @@ async function drawGraph() {
     );
   }
 
-  // Reset zoom
   function resetZoom() {
     svg.transition().duration(750).call(chartZoom.transform, d3.zoomIdentity);
   }
@@ -210,10 +207,8 @@ async function drawGraph() {
 
   chartArea.attr("clip-path", "url(#clip)");
 
-  // Plot data points
   let viewport = chartArea.append("g");
 
-  // Line path
   const line = d3
     .line()
     .x((d) => xScale(d.year))
@@ -226,11 +221,10 @@ async function drawGraph() {
     .join("path")
     .attr("class", "line")
     .attr("d", line)
-    .style("stroke", "#393e8f") // Change line color to pink
+    .style("stroke", "#393e8f")
     .style("fill", "none")
     .style("stroke-width", 2);
 
-  // Add circles on top of lines (ensure circles are on top)
   viewport
     .selectAll("circle")
     .data(aggregatedData)
@@ -241,12 +235,15 @@ async function drawGraph() {
     .attr("fill", (d) => colorScale(movieCountByYear[d.year]))
     .attr("stroke", "#12194a")
     .attr("stroke-width", 2)
-    .style("opacity", 1) // Adjust opacity for low values
+    .style("opacity", 1)
     .on("mouseover", (event, d) => {
       const movieData = disneyData.filter((movie) => movie.year === d.year);
-      const topMovie = movieData.length > 0 ? movieData[0].movie_title : null;
+      const topMovieData = movieData.sort(
+        (a, b) => b.total_gross - a.total_gross
+      )[0];
+      const topMovie = topMovieData ? topMovieData.movie_title : null;
       const topMovieGenre =
-        movieData.length > 0 && movieData[0].genre ? movieData[0].genre : null;
+        topMovieData && topMovieData.genre ? topMovieData.genre : null;
 
       tooltip.transition().duration(200).style("opacity", 1);
 
@@ -271,7 +268,7 @@ async function drawGraph() {
       tooltip.transition().duration(500).style("opacity", 0)
     );
 
-  chartArea.select(".line").lower();
+  chartArea.select(".line").lower(); // Move line to the back
 
   // Legend
   const legendSvg = d3.select("#jade-legendSvg");
@@ -280,7 +277,7 @@ async function drawGraph() {
   const legendGroup = legendSvg
     .append("g")
     .attr("class", "arthur-legend")
-    .attr("transform", `translate(60,50)`);
+    .attr("transform", `translate(40,50)`);
 
   const gradient = legendSvg
     .append("linearGradient")
@@ -314,7 +311,6 @@ async function drawGraph() {
     .domain([minMovies, maxMovies])
     .range([0, legendHeight]);
 
-  // Create the axis for the legend (vertical axis)
   const legendAxis = d3
     .axisRight(legendScale)
     .ticks(5)
@@ -359,8 +355,7 @@ async function drawGraph() {
   sizeLegendGroup
     .selectAll("circle")
     .data(circleSizes)
-    .enter()
-    .append("circle")
+    .join("circle")
     .attr("cy", (d, i) => i * 45 + 5)
     .attr("cx", 30)
     .attr("r", (d) => d)
@@ -371,8 +366,7 @@ async function drawGraph() {
   sizeLegendGroup
     .selectAll("text")
     .data(sizeValues)
-    .enter()
-    .append("text")
+    .join("text")
     .attr("x", 50)
     .attr("y", (d, i) => i * 45 + 10)
     .attr("text-anchor", "start")

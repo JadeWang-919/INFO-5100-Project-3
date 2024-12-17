@@ -6,7 +6,7 @@ button {
   padding: 5px 10px;
   font-size: 14px;
   cursor: pointer;
-  transition: background-color 0.3s ease, border-color 0.3s ease;
+  transition: background-color 0.3s, border-color 0.3s;
 }
 
 button:hover {
@@ -20,34 +20,24 @@ button:hover {
   margin-top: 20px;
 }
 
-#world-map,
-#jade-div {
-  width: fit-content; /* Ensure the content sizes dynamically */
-}
-
 #jade-div {
   width: 1170px;
   display: flex;
-  align-items: flex-start; /* Align children to the top */
+  align-items: flex-start;
 }
 
 #jade-svg {
-  background-image: url("disney.png"); /* Add your Disney Castle image URL */
-  background-size: 50%; /* Adjusts the image size to fit within the element */
-  background-position: center; /* Centers the image within the SVG */
-  background-repeat: no-repeat; /* Prevents the image from repeating */
+  background-image: url("disney.png");
+  background-size: 50%;
+  background-position: center;
+  background-repeat: no-repeat;
 }
 
 #jade-legendContainer {
   display: flex;
-  flex-direction: column; /* Stack children vertically */
-  justify-content: flex-start; /* Align items to the top */
-  align-items: center; /* Center the items horizontally */
-}
-
-.legend-button {
-  margin-top: 10px; /* Add some spacing between the SVG and the button */
-  align-self: center; /* Make sure the button is centered horizontally */
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
 }
 
 .gridlines line {
