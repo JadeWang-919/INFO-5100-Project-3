@@ -568,6 +568,5 @@ document.addEventListener("DOMContentLoaded", async function () {
   window.updateStateChart = function (stateName) {
     stateName = stateName.replace(/ /g, "_");
     renderChart(stateName, unemploymentData, ethanolData);
-    console.log(`Chart updated for state: ${stateName}`);
   };
 });
