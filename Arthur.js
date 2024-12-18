@@ -12,7 +12,7 @@ const unemploymentColorScale = d3.scaleSequential(d3.interpolateBlues);
 const legendWidth = 20;
 const legendHeight = 200;
 
-// Create a group inside the legend SVG for the legend content
+// Create legend groups and gradient
 const legendGroup = legendSvg.append("g")
   .attr("class", "arthur-legend")
   .attr("transform", `translate(60,50)`);
@@ -26,7 +26,7 @@ const gradient = defs.append("linearGradient")
 gradient.append("stop").attr("class", "start").attr("offset", "0%");
 gradient.append("stop").attr("class", "end").attr("offset", "100%");
 
-// Legend Title (centered above the rectangle)
+// Legend Title
 legendGroup.append("text")
   .attr("class", "arthur-legend-title")
   .attr("x", legendWidth / 2)
@@ -62,7 +62,7 @@ const stripePattern = defs.append("pattern")
     .attr("width", 10)
     .attr("height", 10)
     .attr("patternUnits", "userSpaceOnUse");
-  
+
 stripePattern.append("line")
     .attr("x1", 0)
     .attr("y1", 0)
@@ -91,7 +91,7 @@ alcLegendContainer.select("svg")
       .attr("y", 22) 
       .text("High Alcohol Consumption (> 1.3 gal/person)")
       .style("font-size", "14px");
-    
+
 
 (async function loadAndVisualizeData() {
   const topoData = await d3.json("us-smaller.json");
@@ -123,17 +123,21 @@ alcLegendContainer.select("svg")
 
   const states = topojson.feature(topoData, topoData.objects.states).features;
 
+  // Ensure these elements exist before calling updateMap
   const yearSlider = d3.select("#yearSlider");
   const dataTypeDropdown = d3.select("#dataType");
   const yearLabel = d3.select("#yearLabel");
 
-  // Mapping from data keys to descriptive labels in the legend
+  // Append state and label groups once, not on each update
+  const gStates = svg.append("g").attr("class", "states-group");
+  const gLabels = svg.append("g").attr("class", "labels-group");
+
+  // Mapping from data keys to descriptive labels
   const consumptionLabels = {
     "ethanol_beer_gallons_per_capita": "Beer consumption",
     "ethanol_wine_gallons_per_capita": "Wine consumption",
     "ethanol_spirit_gallons_per_capita": "Spirit consumption"
   };
-
 
   function updateMap(selectedYear, selectedType) {
     // Filter unemployment data by year
@@ -142,56 +146,47 @@ alcLegendContainer.select("svg")
       yearData.map(d => [d.state.toLowerCase(), d["Unemployed - Percent of Labor Force"]])
     );
 
-    // Compute min and max unemployment for this year
     const values = Object.values(unemploymentByState).filter(v => v != null);
     const [minVal, maxVal] = d3.extent(values);
-
-    // Handle cases where no data is available
     const actualMin = (minVal !== undefined) ? minVal : 0;
     const actualMax = (maxVal !== undefined) ? maxVal : 0;
-
-    // Update color scale domain based on this year's data
     unemploymentColorScale.domain([actualMin, actualMax]);
 
-    const gStates = svg.selectAll(".states-group").data([null]);
-    gStates.enter().append("g").attr("class", "states-group");
-    const gLabels = svg.selectAll(".labels-group").data([null]);
-    gLabels.enter().append("g").attr("class", "labels-group");
+    const stateSelection = gStates.selectAll(".arthur-state")
+      .data(states, d => d.id);
 
-    gStates.selectAll(".arthur-state")
-    .data(states)
-    .join("g")
-    .attr("class", "arthur-state")
-    .each(function (d) {
-      const stateName = stateIdToName[d.id]?.toLowerCase();
+    const stateEnter = stateSelection.enter()
+      .append("g")
+      .attr("class", "arthur-state");
 
-      const unemployment = unemploymentByState[stateName];
-      const alcohol = alcoholData.find(
-        record => record.state.toLowerCase() === stateName && record.year === selectedYear
-      )?.[selectedType];
+    stateEnter.merge(stateSelection)
+      .each(function(d) {
+        const stateName = stateIdToName[d.id]?.toLowerCase();
+        const unemployment = unemploymentByState[stateName];
+        const alcohol = alcoholData.find(
+          record => record.state.toLowerCase() === stateName && record.year === selectedYear
+        )?.[selectedType];
 
-      const unemploymentColor = unemploymentColorScale(unemployment || 0);
+        const unemploymentColor = unemploymentColorScale(unemployment || 0);
 
-      const stateGroup = d3.select(this);
+        const stateGroup = d3.select(this);
 
-      // Remove existing paths to prevent duplicates
-      stateGroup.selectAll("path.state-base").remove();
-      stateGroup.selectAll("path.state-pattern").remove();
+        // Clean old paths
+        stateGroup.selectAll("path.state-base").remove();
+        stateGroup.selectAll("path.state-pattern").remove();
 
-      stateGroup.append("path")
-        .attr("class", "state-base")
-        .attr("d", path(d))
-        .style("fill", unemploymentColor);
-
-      if (alcohol > threshold) {
         stateGroup.append("path")
-          .attr("class", "state-pattern")
+          .attr("class", "state-base")
           .attr("d", path(d))
-          .style("fill", "url(#stripe-pattern)");
-      }
-    })
+          .style("fill", unemploymentColor);
 
-
+        if (alcohol > threshold) {
+          stateGroup.append("path")
+            .attr("class", "state-pattern")
+            .attr("d", path(d))
+            .style("fill", "url(#stripe-pattern)");
+        }
+      })
       .on("mouseover", (event, d) => {
         const stateName = stateIdToName[d.id];
         if (!stateName) return;
@@ -206,7 +201,7 @@ alcLegendContainer.select("svg")
           .style("stroke-width", "1px");
 
         const unemploymentRate = unemploymentByState[stateName.toLowerCase()];
-        const selectedConsumptionLabel = consumptionLabels[selectedType];
+        const selectedConsumptionLabel = consumptionLabels[selectedType] || "Consumption";
         const selectedValue = alcoholInfo ? alcoholInfo[selectedType] : "No data";
         const formattedValue = (selectedValue !== "No data") ? selectedValue.toFixed(3) + " gallons per person" : "No data";
 
@@ -217,8 +212,11 @@ alcLegendContainer.select("svg")
             Unemployment Rate: ${unemploymentRate != null ? unemploymentRate.toFixed(1) + '%' : 'No data'}<br>
             ${selectedConsumptionLabel}: ${formattedValue}
           `);
-        // Update the chart with the selected state
-        window.updateStateChart(stateName.toLowerCase());
+
+        // If window.updateStateChart is defined, call it
+        if (window.updateStateChart) {
+          window.updateStateChart(stateName.toLowerCase());
+        }
 
         const formattedStateValue = stateName.toLowerCase().replace(/ /g, "_");
         d3.select('#state-select').property("value", formattedStateValue);
@@ -232,17 +230,19 @@ alcLegendContainer.select("svg")
         d3.select(event.currentTarget)
           .style("stroke", "#ffffff")
           .style("stroke-width", "1px");
-
         tooltip.style("visibility", "hidden");
       });
 
-    updateLegend(actualMin, actualMax);
+    stateSelection.exit().remove();
 
-      // Add state codes for easier recognition
-      gLabels.selectAll(".state-code")
-      .data(states)
-      .join("text")
+    // Update labels
+    const labelSelection = gLabels.selectAll(".state-code")
+      .data(states, d => d.id);
+
+    labelSelection.enter()
+      .append("text")
       .attr("class", "state-code")
+      .merge(labelSelection)
       .attr("x", d => {
         const centroid = path.centroid(d);
         return centroid && !isNaN(centroid[0]) ? centroid[0] : 0;
@@ -262,11 +262,13 @@ alcLegendContainer.select("svg")
       })
       .style("font-size", "10px")
       .style("fill", "black");
+
+    labelSelection.exit().remove();
+
+    updateLegend(actualMin, actualMax);
   }
 
-
   function updateLegend(minVal, maxVal) {
-    // Update gradient stops
     gradient.select(".start")
       .attr("stop-color", unemploymentColorScale(maxVal));
 
@@ -275,7 +277,6 @@ alcLegendContainer.select("svg")
 
     legendRect.style("fill", "url(#legend-gradient)");
 
-    // Legend scale and axis
     const legendScale = d3.scaleLinear()
       .domain([minVal, maxVal])
       .range([legendHeight, 0]);
@@ -292,7 +293,6 @@ alcLegendContainer.select("svg")
     yearLabel.text(this.value);
     updateMap(selectedYear, dataTypeDropdown.property("value"));
 
-    // Dispatch a custom 'yearChanged' event with the new year
     const yearChangeEvent = new CustomEvent('yearChanged', {
       detail: { year: selectedYear }
     });
@@ -303,22 +303,18 @@ alcLegendContainer.select("svg")
   dataTypeDropdown.on("change", function () {
     const selectedYear = +yearSlider.property("value");
     updateMap(selectedYear, this.value);
-
-    // Optionally, you can also dispatch a 'yearChanged' event here if the data type affects the year
-    // const yearChangeEvent = new CustomEvent('yearChanged', {
-    //   detail: { year: selectedYear }
-    // });
-    // window.dispatchEvent(yearChangeEvent);
   });
 
-  // Initial render
-  updateMap(+yearSlider.property("value"), dataTypeDropdown.property("value"));
-
-  // Dispatch the 'yearChanged' event after initial render to synchronize the chart
+  // Initial render with default dropdown and slider values
   const initialYear = +yearSlider.property("value");
+  const initialType = dataTypeDropdown.property("value");
+  updateMap(initialYear, initialType);
+
+  // Dispatch the 'yearChanged' event after initial render
   const initialYearChangeEvent = new CustomEvent('yearChanged', {
     detail: { year: initialYear }
   });
   window.dispatchEvent(initialYearChangeEvent);
   console.log(`Dispatched initial yearChanged event for year: ${initialYear}`);
+
 })();
