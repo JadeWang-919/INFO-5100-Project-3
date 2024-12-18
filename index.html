@@ -4,11 +4,72 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Alcohol vs. Unemployment</title>
+    <!-- D3.js and TopoJSON -->
     <script src="https://d3js.org/d3.v7.min.js"></script>
     <script src="https://unpkg.com/topojson-client"></script>
+    <!-- CSS Stylesheets -->
     <link rel="stylesheet" href="Arthur.css" />
     <link rel="stylesheet" href="Jade.css" />
     <link rel="stylesheet" href="Xuyuan.css" />
+    <style>
+      /* Additional inline styles (optional) */
+      body {
+        font-family: Arial, sans-serif;
+        margin: 20px;
+      }
+      .center-content {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
+      #controls-container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        margin-top: 20px;
+      }
+      #main-controls {
+        display: flex;
+        align-items: center;
+        gap: 20px;
+      }
+      #legend {
+        display: flex;
+        gap: 20px;
+        margin-top: 10px;
+      }
+      .legend-item {
+        display: flex;
+        align-items: center;
+        gap: 5px;
+      }
+      .legend-blue {
+        width: 20px;
+        height: 20px;
+        background-color: #5db5f0;
+        border: 1px solid #000;
+      }
+      .legend-red {
+        width: 20px;
+        height: 20px;
+        background-color: #ba4227;
+        border: 1px solid #000;
+      }
+      /* Tooltip Styling (if not already in CSS) */
+      .tooltip {
+        position: absolute;
+        text-align: center;
+        padding: 6px;
+        font-size: 12px;
+        background: #333;
+        color: #fff;
+        border-radius: 4px;
+        pointer-events: none;
+        opacity: 0;
+        transition: opacity 0.2s ease-in-out;
+        z-index: 9999;
+      }
+    </style>
   </head>
   <body>
     <div class="center-content">
@@ -43,7 +104,8 @@
 
         <!-- US Map and Legend -->
         <div style="display: flex; align-items: flex-start; margin-top: 20px">
-          <svg id="choropleth" width="960" height="600"></svg>
+          <svg id="choropleth" width="960" height="600" viewBox="0 0 960 600" preserveAspectRatio="xMidYMid meet"></svg>
+
           <div id="legendContainer" style="margin-left: 20px">
             <svg id="legendSvg" width="200" height="400"></svg>
           </div>
@@ -57,7 +119,7 @@
     <div id="time-series-section">
       <!-- Chart -->
       <div id="time-series-chart">
-        <svg id="time-series-svg" width="1000" height="600"></svg>
+        <svg id="time-series-svg" width="1000" height="600" viewBox="0 0 1000 600" preserveAspectRatio="xMidYMid meet"></svg>
       </div>
 
       <div id="controls-container">
@@ -69,15 +131,11 @@
             <select id="state-select"></select>
           </div>
 
-          <!-- Optional: Year Selector (remove if not needed) -->
+          <!-- Year Selector -->
           <div id="year-selector">
             <label for="year-select">Select a Year:</label>
             <select id="year-select">
-              <!-- Example years (remove if not needed) -->
-              <option value="2000">2000</option>
-              <option value="2005">2005</option>
-              <option value="2010">2010</option>
-              <option value="2015">2015</option>
+              <!-- Options will be populated dynamically by Xuyuan.js -->
             </select>
           </div>
 
@@ -108,7 +166,7 @@
     <!-- Disney vs Unemployment Chart -->
     <div class="center-content">
       <div id="jade-div">
-        <svg id="jade-svg" width="1000" height="600"></svg>
+        <svg id="jade-svg" width="1000" height="600" viewBox="0 0 1000 600" preserveAspectRatio="xMidYMid meet"></svg>
         <div id="jade-legendContainer">
           <svg id="jade-legendSvg" width="200" height="400"></svg>
           <button id="reset-view">Reset Zoom</button>

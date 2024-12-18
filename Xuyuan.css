@@ -91,3 +91,48 @@ body {
 .grid path {
   stroke: none;
 }
+
+.year-marker {
+  stroke: black;
+  stroke-dasharray: 4,4;
+}
+
+/* Highlight for Unemployment Data Point */
+.unemployment-highlight {
+  fill: none;
+  stroke: #5db5f0;
+  stroke-width: 3px;
+}
+
+/* Highlight for Ethanol Consumption Data Point */
+.ethanol-highlight {
+  fill: none;
+  stroke: #ba4227;
+  stroke-width: 3px;
+}
+
+/* Tooltip Styling */
+.tooltip {
+  position: absolute;
+  text-align: center;
+  padding: 6px;
+  font-size: 12px;
+  background: #333;
+  color: #fff;
+  border-radius: 4px;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.2s ease-in-out;
+  z-index: 9999;
+}
+
+/* Gridlines Styling */
+.grid line {
+  stroke: #bbb;
+  stroke-opacity: 0.7;
+  shape-rendering: crispEdges;
+}
+
+.grid path {
+  stroke: none;
+}

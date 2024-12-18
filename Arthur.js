@@ -1,5 +1,6 @@
+// Arthur.js
 
-// For main graph
+// For main graph 
 const width = 960, height = 600;
 const svg = d3.select("#choropleth");
 const tooltip = d3.select("body").append("div").attr("class", "arthur-tooltip").style("visibility", "hidden");
@@ -83,15 +84,14 @@ alcLegendContainer.append("svg")
       .attr("height", 15)
       .attr("fill", "url(#stripe-pattern)");
     
- alcLegendContainer.select("svg")
+alcLegendContainer.select("svg")
       .append("text")
       .attr("class", "arthur-legend")
       .attr("x", 40) 
       .attr("y", 22) 
       .text("High Alcohol Consumption (> 1.3 gal/person)")
       .style("font-size", "14px");
-  
-  
+    
 
 (async function loadAndVisualizeData() {
   const topoData = await d3.json("us-smaller.json");
@@ -153,8 +153,10 @@ alcLegendContainer.append("svg")
     // Update color scale domain based on this year's data
     unemploymentColorScale.domain([actualMin, actualMax]);
 
-    const gStates = svg.append("g").attr("class", "states-group");
-    const gLabels = svg.append("g").attr("class", "labels-group");
+    const gStates = svg.selectAll(".states-group").data([null]);
+    gStates.enter().append("g").attr("class", "states-group");
+    const gLabels = svg.selectAll(".labels-group").data([null]);
+    gLabels.enter().append("g").attr("class", "labels-group");
 
     gStates.selectAll(".arthur-state")
     .data(states)
@@ -162,29 +164,33 @@ alcLegendContainer.append("svg")
     .attr("class", "arthur-state")
     .each(function (d) {
       const stateName = stateIdToName[d.id]?.toLowerCase();
-  
+
       const unemployment = unemploymentByState[stateName];
       const alcohol = alcoholData.find(
         record => record.state.toLowerCase() === stateName && record.year === selectedYear
       )?.[selectedType];
-  
+
       const unemploymentColor = unemploymentColorScale(unemployment || 0);
-  
+
       const stateGroup = d3.select(this);
-  
+
+      // Remove existing paths to prevent duplicates
+      stateGroup.selectAll("path.state-base").remove();
+      stateGroup.selectAll("path.state-pattern").remove();
+
       stateGroup.append("path")
         .attr("class", "state-base")
         .attr("d", path(d))
         .style("fill", unemploymentColor);
-  
+
       if (alcohol > threshold) {
         stateGroup.append("path")
           .attr("class", "state-pattern")
           .attr("d", path(d))
-          .style("fill", "url(#stripe-pattern)")
+          .style("fill", "url(#stripe-pattern)");
       }
     })
-  
+
 
       .on("mouseover", (event, d) => {
         const stateName = stateIdToName[d.id];
@@ -211,7 +217,11 @@ alcLegendContainer.append("svg")
             Unemployment Rate: ${unemploymentRate != null ? unemploymentRate.toFixed(1) + '%' : 'No data'}<br>
             ${selectedConsumptionLabel}: ${formattedValue}
           `);
-          window.updateStateChart(stateName.toLowerCase());
+        // Update the chart with the selected state
+        window.updateStateChart(stateName.toLowerCase());
+
+        const formattedStateValue = stateName.toLowerCase().replace(/ /g, "_");
+        d3.select('#state-select').property("value", formattedStateValue);
       })
       .on("mousemove", event => {
         tooltip
@@ -278,14 +288,37 @@ alcLegendContainer.append("svg")
   }
 
   yearSlider.on("input", function () {
+    const selectedYear = +this.value;
     yearLabel.text(this.value);
-    updateMap(+this.value, dataTypeDropdown.property("value"));
+    updateMap(selectedYear, dataTypeDropdown.property("value"));
+
+    // Dispatch a custom 'yearChanged' event with the new year
+    const yearChangeEvent = new CustomEvent('yearChanged', {
+      detail: { year: selectedYear }
+    });
+    window.dispatchEvent(yearChangeEvent);
+    console.log(`Dispatched yearChanged event for year: ${selectedYear}`);
   });
 
   dataTypeDropdown.on("change", function () {
-    updateMap(+yearSlider.property("value"), this.value);
+    const selectedYear = +yearSlider.property("value");
+    updateMap(selectedYear, this.value);
+
+    // Optionally, you can also dispatch a 'yearChanged' event here if the data type affects the year
+    // const yearChangeEvent = new CustomEvent('yearChanged', {
+    //   detail: { year: selectedYear }
+    // });
+    // window.dispatchEvent(yearChangeEvent);
   });
 
   // Initial render
   updateMap(+yearSlider.property("value"), dataTypeDropdown.property("value"));
+
+  // Dispatch the 'yearChanged' event after initial render to synchronize the chart
+  const initialYear = +yearSlider.property("value");
+  const initialYearChangeEvent = new CustomEvent('yearChanged', {
+    detail: { year: initialYear }
+  });
+  window.dispatchEvent(initialYearChangeEvent);
+  console.log(`Dispatched initial yearChanged event for year: ${initialYear}`);
 })();
