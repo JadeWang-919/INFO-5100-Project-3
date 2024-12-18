@@ -127,53 +127,16 @@ document.addEventListener("DOMContentLoaded", async function () {
     .attr("id", "chart-clip")
     .append("rect")
     .attr("width", chartWidth)
-    .attr("height", chartHeight);
-
-  // Define Scales
-  const xScale = d3.scaleLinear().range([0, chartWidth]);
-  const yScaleUnemployment = d3.scaleLinear().range([chartHeight, 0]);
-  const yScaleEthanol = d3.scaleLinear().range([chartHeight, 0]);
-
-  // Define Axes
-  const xAxis = d3.axisBottom(xScale).ticks(10).tickFormat(d3.format("d"));
-  const yAxisLeft = d3.axisLeft(yScaleUnemployment);
-  const yAxisRight = d3.axisRight(yScaleEthanol);
-
-  // Append Axes Groups
-  const xAxisGroup = chartArea
-    .append("g")
-    .attr("transform", `translate(0, ${chartHeight})`);
-  const yAxisLeftGroup = chartArea.append("g");
-  const yAxisRightGroup = chartArea
-    .append("g")
-    .attr("transform", `translate(${chartWidth}, 0)`);
+    .attr("height", chartHeight - 4)
+    .attr("x", 0)
+    .attr("y", 4);
 
   // Initialize Tooltip
   const tooltip = d3
     .select("body")
     .append("div")
-    .attr("class", "tooltip")
+    .attr("class", "arthur-tooltip")
     .style("opacity", 0);
-
-  // Function to Render Gridlines
-  function renderGridlines() {
-    const xGrid = d3.axisBottom(xScale).tickSize(-chartHeight).tickFormat("");
-    const yGrid = d3
-      .axisLeft(yScaleUnemployment)
-      .tickSize(-chartWidth)
-      .tickFormat("");
-
-    chartArea.selectAll(".x-grid").remove();
-    chartArea.selectAll(".y-grid").remove();
-
-    chartArea
-      .append("g")
-      .attr("class", "grid x-grid")
-      .attr("transform", `translate(0,${chartHeight})`)
-      .call(xGrid);
-
-    chartArea.append("g").attr("class", "grid y-grid").call(yGrid);
-  }
 
   // Function to Load Data
   async function loadData() {
@@ -207,14 +170,25 @@ document.addEventListener("DOMContentLoaded", async function () {
     .attr("id", "viewport")
     .attr("clip-path", "url(#chart-clip)");
 
+  const xScale = d3
+    .scaleLinear()
+    .domain([1977, 2018])
+    .range([10, chartWidth - 10]);
+
   // Function to Render the Chart
   function renderChart(stateName, unemploymentData, ethanolData) {
-    // Clear Previous Chart Elements (except axes and viewport)
+    // Clear Previous Chart Elements
     viewport.selectAll(".line").remove();
     viewport.selectAll(".point").remove();
     viewport.selectAll(".year-marker").remove();
     viewport.selectAll(".year-highlight").remove();
     chartArea.selectAll("text.no-data").remove();
+
+    // Clear existing axes and gridlines
+    chartArea.selectAll(".x-axis").remove();
+    chartArea.selectAll(".x-gridlines").remove();
+    chartArea.selectAll(".y-axis").remove();
+    chartArea.selectAll(".y-gridlines").remove();
 
     // Filter Data for the Selected State
     const stateUnemployment = unemploymentData.filter(
@@ -252,18 +226,61 @@ document.addEventListener("DOMContentLoaded", async function () {
     currentUnemploymentData = unemploymentRates;
     currentEthanolData = ethanolConsumption;
 
-    // Set Domains for Scales
-    xScale.domain(d3.extent(years));
-    yScaleUnemployment.domain([0, d3.max(unemploymentRates, (d) => d.value)]);
-    yScaleEthanol.domain([0, d3.max(ethanolConsumption, (d) => d.value)]);
+    // Define yScales
+    const yScaleUnemployment = d3
+      .scaleLinear()
+      .domain([
+        d3.min(unemploymentRates, (d) => d.value),
+        d3.max(unemploymentRates, (d) => d.value),
+      ])
+      .range([chartHeight - 10, 10]);
+    const yScaleEthanol = d3
+      .scaleLinear()
+      .domain([
+        d3.min(ethanolConsumption, (d) => d.value),
+        d3.max(ethanolConsumption, (d) => d.value),
+      ])
+      .range([chartHeight - 10, 10]);
 
-    // Render Axes
-    xAxisGroup.call(xAxis);
-    yAxisLeftGroup.call(yAxisLeft);
-    yAxisRightGroup.call(yAxisRight);
+    // Append Axes & Gridlines
+    let xAxis = d3.axisBottom(xScale).tickFormat(d3.format("d"));
+    let xGridlines = d3
+      .axisBottom(xScale)
+      .tickSize(-chartHeight + 10)
+      .tickFormat("");
+    let xAxisGroup = chartArea
+      .append("g")
+      .attr("class", "x-axis")
+      .attr("transform", `translate(0,${chartHeight})`)
+      .call(xAxis);
+    let xGridlineGroup = chartArea
+      .append("g")
+      .attr("class", "x-gridlines")
+      .attr("transform", `translate(0,${chartHeight})`)
+      .call(xGridlines);
+    xGridlineGroup.lower();
 
-    // Render Gridlines
-    renderGridlines();
+    let yAxisLeft = d3.axisLeft(yScaleUnemployment);
+    let yAxisRight = d3.axisRight(yScaleEthanol);
+    let yGridlines = d3
+      .axisLeft(yScaleUnemployment)
+      .tickSize(-chartWidth)
+      .tickFormat("");
+    let yAxisRightGroup = chartArea
+      .append("g")
+      .attr("class", "y-axis")
+      .attr("transform", `translate(${chartWidth}, 0)`)
+      .call(yAxisRight);
+    let yAxisLeftGroup = chartArea
+      .append("g")
+      .attr("class", "y-axis")
+      .call(yAxisLeft);
+
+    let yGridlineGroup = chartArea
+      .append("g")
+      .attr("class", "y-gridlines")
+      .call(yGridlines);
+    yGridlineGroup.lower();
 
     // Define Lines
     const unemploymentLine = d3
@@ -294,15 +311,6 @@ document.addEventListener("DOMContentLoaded", async function () {
       .style("fill", "none");
 
     // Draw Data Points
-    updatePoints(viewport, unemploymentRates, ethanolConsumption);
-
-    // Highlight the Currently Selected Year
-    const selectedYearValue = +document.getElementById("year-select").value;
-    highlightYear(selectedYearValue);
-  }
-
-  // Function to Update Data Points
-  function updatePoints(viewport, unemploymentRates, ethanolConsumption) {
     // Unemployment Points
     viewport
       .selectAll(".unemployment-point")
@@ -315,7 +323,9 @@ document.addEventListener("DOMContentLoaded", async function () {
       .style("fill", "#5db5f0")
       .on("mouseover", (event, d) => {
         tooltip.transition().duration(200).style("opacity", 1);
-        tooltip.html(`Year: ${d.year}<br>Unemployment: ${d.value}%`);
+        tooltip.html(
+          `Year: ${d.year}<br>Unemployment: ${d3.format(".3f")(d.value)}%`
+        );
       })
       .on("mousemove", (event) => {
         tooltip
@@ -348,166 +358,174 @@ document.addEventListener("DOMContentLoaded", async function () {
       .on("mouseout", () => {
         tooltip.transition().duration(200).style("opacity", 0);
       });
-  }
 
-  // Function to Highlight Selected Year
-  function highlightYear(selectedYear) {
-    // Remove Previous Highlights
-    viewport.selectAll(".year-marker").remove();
-    viewport.selectAll(".year-highlight").remove();
+    // Define Zoom Behavior
+    const zoom = d3
+      .zoom()
+      .scaleExtent([0.5, 4]) // Allow zooming out to 50% and in up to 400%
+      .on("zoom", handleZoom);
 
-    // Check if Data Exists
-    if (!currentUnemploymentData.length || !currentEthanolData.length) return;
+    // Apply Zoom to SVG
+    svg.call(zoom);
 
-    // Check if Selected Year is Within Data Range
-    const xDomain = xScale.domain();
-    if (selectedYear < xDomain[0] || selectedYear > xDomain[1]) {
-      // Year Out of Range
-      return;
-    }
+    function handleZoom(event) {
+      const transform = event.transform;
 
-    // Add Vertical Line at Selected Year
-    viewport
-      .append("line")
-      .attr("class", "year-marker")
-      .attr("x1", xScale(selectedYear))
-      .attr("y1", 0)
-      .attr("x2", xScale(selectedYear))
-      .attr("y2", chartHeight)
-      .style("stroke", "black")
-      .style("stroke-dasharray", "4,4");
+      // Update Scales based on Zoom
+      const new_xScale = transform.rescaleX(xScale);
+      const new_yScaleUnemployment = transform.rescaleY(yScaleUnemployment);
+      const new_yScaleEthanol = transform.rescaleY(yScaleEthanol);
 
-    // Highlight Unemployment Point for Selected Year
-    const ur = currentUnemploymentData.find((d) => d.year === selectedYear);
-    if (ur) {
+      // Update Axes with New Scales
+      xAxisGroup.call(xAxis.scale(new_xScale));
+      yAxisLeftGroup.call(yAxisLeft.scale(new_yScaleUnemployment));
+      yAxisRightGroup.call(yAxisRight.scale(new_yScaleEthanol));
+
+      // Update Gridlines with New Scales
+      const xGrid = d3
+        .axisBottom(new_xScale)
+        .tickSize(-chartHeight)
+        .tickFormat("");
+      const yGrid = d3
+        .axisLeft(new_yScaleUnemployment)
+        .tickSize(-chartWidth)
+        .tickFormat("");
+
+      chartArea.select(".x-gridlines").call(xGrid);
+      chartArea.select(".y-gridlines").call(yGrid);
+
+      // Update Lines with New Scales
+      viewport.selectAll(".unemployment-line").attr(
+        "d",
+        d3
+          .line()
+          .x((d) => new_xScale(d.year))
+          .y((d) => new_yScaleUnemployment(d.value))
+      );
+
+      viewport.selectAll(".ethanol-line").attr(
+        "d",
+        d3
+          .line()
+          .x((d) => new_xScale(d.year))
+          .y((d) => new_yScaleEthanol(d.value))
+      );
+
+      // Update Points with New Scales
       viewport
-        .append("circle")
-        .attr("class", "year-highlight unemployment-highlight")
-        .attr("cx", xScale(ur.year))
-        .attr("cy", yScaleUnemployment(ur.value))
-        .attr("r", 10)
-        .style("fill", "none")
-        .style("stroke", "#5db5f0")
-        .style("stroke-width", 3);
-    }
+        .selectAll(".unemployment-point")
+        .attr("cx", (d) => new_xScale(d.year))
+        .attr("cy", (d) => new_yScaleUnemployment(d.value));
 
-    // Highlight Ethanol Consumption Point for Selected Year
-    const ec = currentEthanolData.find((d) => d.year === selectedYear);
-    if (ec) {
       viewport
-        .append("circle")
-        .attr("class", "year-highlight ethanol-highlight")
-        .attr("cx", xScale(ec.year))
-        .attr("cy", yScaleEthanol(ec.value))
-        .attr("r", 10)
-        .style("fill", "none")
-        .style("stroke", "#ba4227")
-        .style("stroke-width", 3);
+        .selectAll(".ethanol-point")
+        .attr("cx", (d) => new_xScale(d.year))
+        .attr("cy", (d) => new_yScaleEthanol(d.value));
+
+      // Re-apply Highlights (if any)
+      const selectedYearValue = +document.getElementById("year-select").value;
+      if (selectedYearValue) {
+        highlightYear(
+          selectedYearValue,
+          new_xScale,
+          new_yScaleUnemployment,
+          new_yScaleEthanol
+        );
+      }
     }
-  }
 
-  // Define Zoom Behavior
-  const zoom = d3
-    .zoom()
-    .scaleExtent([0.5, 4]) // Allow zooming out to 50% and in up to 400%
-    .translateExtent([
-      [0, 0],
-      [width, height],
-    ]) // Limit panning to the chart area
-    .on("zoom", handleZoom);
-
-  // Apply Zoom to SVG
-  svg.call(zoom);
-
-  // Function to Handle Zoom Events
-  function handleZoom(event) {
-    const transform = event.transform;
-
-    // Update Scales based on Zoom
-    const new_xScale = transform.rescaleX(xScale);
-    const new_yScaleUnemployment = transform.rescaleY(yScaleUnemployment);
-    const new_yScaleEthanol = transform.rescaleY(yScaleEthanol);
-
-    // Update Axes with New Scales
-    xAxisGroup.call(xAxis.scale(new_xScale));
-    yAxisLeftGroup.call(yAxisLeft.scale(new_yScaleUnemployment));
-    yAxisRightGroup.call(yAxisRight.scale(new_yScaleEthanol));
-
-    // Update Gridlines with New Scales
-    const xGrid = d3
-      .axisBottom(new_xScale)
-      .tickSize(-chartHeight)
-      .tickFormat("");
-    const yGrid = d3
-      .axisLeft(new_yScaleUnemployment)
-      .tickSize(-chartWidth)
-      .tickFormat("");
-
-    chartArea.select(".x-grid").call(xGrid);
-    chartArea.select(".y-grid").call(yGrid);
-
-    // Update Lines with New Scales
-    viewport.selectAll(".unemployment-line").attr(
-      "d",
-      d3
-        .line()
-        .x((d) => new_xScale(d.year))
-        .y((d) => new_yScaleUnemployment(d.value))
-    );
-
-    viewport.selectAll(".ethanol-line").attr(
-      "d",
-      d3
-        .line()
-        .x((d) => new_xScale(d.year))
-        .y((d) => new_yScaleEthanol(d.value))
-    );
-
-    // Update Points with New Scales
-    viewport
-      .selectAll(".unemployment-point")
-      .attr("cx", (d) => new_xScale(d.year))
-      .attr("cy", (d) => new_yScaleUnemployment(d.value));
-
-    viewport
-      .selectAll(".ethanol-point")
-      .attr("cx", (d) => new_xScale(d.year))
-      .attr("cy", (d) => new_yScaleEthanol(d.value));
-
-    // Re-apply Highlights (if any)
-    const selectedYearValue = +document.getElementById("year-select").value;
-    if (selectedYearValue) {
-      highlightYear(selectedYearValue);
-    }
-  }
-
-  // Reset Zoom Button Functionality
-  d3.select("#reset-view-xuyuan").on("click", () => {
-    svg.transition().duration(750).call(zoom.transform, d3.zoomIdentity);
-  });
-
-  // Listen to Changes on the "Select a Year" Dropdown
-  d3.select("#year-select").on("change", function () {
-    const selectedYear = +this.value;
-    highlightYear(selectedYear);
-
-    // Dispatch 'yearChanged' event to synchronize with the map
-    const yearChangeEvent = new CustomEvent("yearChanged", {
-      detail: { year: selectedYear },
+    // Reset Zoom Button Functionality
+    d3.select("#reset-view-xuyuan").on("click", () => {
+      svg.transition().duration(750).call(zoom.transform, d3.zoomIdentity);
     });
-    window.dispatchEvent(yearChangeEvent);
-    console.log(`Dispatched yearChanged event for year: ${selectedYear}`);
-  });
 
-  // Listen for Custom 'yearChanged' Events from the Map
-  window.addEventListener("yearChanged", function (e) {
-    const newYear = e.detail.year;
-    // Update the "year-select" dropdown value without triggering the 'change' event again
-    d3.select("#year-select").property("value", newYear);
-    // Highlight the new year on the chart
-    highlightYear(newYear);
-    console.log(`Received yearChanged event for year: ${newYear}`);
-  });
+    // Highlight the Currently Selected Year
+    function highlightYear(
+      selectedYear,
+      xScale,
+      new_yScaleUnemployment,
+      new_yScaleEthanol
+    ) {
+      // Remove Previous Highlights
+      viewport.selectAll(".year-marker").remove();
+      viewport.selectAll(".year-highlight").remove();
+
+      // Add Vertical Line at Selected Year
+      viewport
+        .append("line")
+        .attr("class", "year-marker")
+        .attr("x1", xScale(selectedYear))
+        .attr("y1", 0)
+        .attr("x2", xScale(selectedYear))
+        .attr("y2", chartHeight)
+        .style("stroke", "black")
+        .style("stroke-dasharray", "4,4");
+
+      // Highlight Unemployment Point for Selected Year
+      const ur = currentUnemploymentData.find((d) => d.year === selectedYear);
+      if (ur) {
+        viewport
+          .append("circle")
+          .attr("class", "year-highlight unemployment-highlight")
+          .attr("cx", xScale(ur.year))
+          .attr("cy", new_yScaleUnemployment(ur.value))
+          .attr("r", 10)
+          .style("fill", "none")
+          .style("stroke", "#5db5f0")
+          .style("stroke-width", 3);
+      }
+
+      // Highlight Ethanol Consumption Point for Selected Year
+      const ec = currentEthanolData.find((d) => d.year === selectedYear);
+      if (ec) {
+        viewport
+          .append("circle")
+          .attr("class", "year-highlight ethanol-highlight")
+          .attr("cx", xScale(ec.year))
+          .attr("cy", new_yScaleEthanol(ec.value))
+          .attr("r", 10)
+          .style("fill", "none")
+          .style("stroke", "#ba4227")
+          .style("stroke-width", 3);
+      }
+    }
+
+    // Listen to Changes on the "Select a Year" Dropdown
+    d3.select("#year-select").on("change", function () {
+      const selectedYear = +this.value;
+      highlightYear(selectedYear, xScale, yScaleUnemployment, yScaleEthanol);
+
+      // Dispatch 'yearChanged' event to synchronize with the map
+      const yearChangeEvent = new CustomEvent("yearChanged", {
+        detail: { year: selectedYear },
+      });
+      window.dispatchEvent(yearChangeEvent);
+      console.log(`Dispatched yearChanged event for year: ${selectedYear}`);
+    });
+
+    // After rendering the chart, call highlightYear
+    const selectedYear = +document.getElementById("year-select").value;
+    if (selectedYear) {
+      highlightYear(selectedYear, xScale, yScaleUnemployment, yScaleEthanol);
+    }
+
+    // Listen for Custom 'yearChanged' Events from the Map
+    window.addEventListener("yearChanged", function (e) {
+      const newYear = e.detail.year;
+      // Update the "year-select" dropdown value without triggering the 'change' event again
+      d3.select("#year-select").property("value", newYear);
+      // Highlight the new year on the chart
+      highlightYear(
+        newYear,
+        xScale,
+        yScaleUnemployment,
+        yScaleEthanol,
+        currentUnemploymentData,
+        currentEthanolData
+      );
+      console.log(`Received yearChanged event for year: ${newYear}`);
+    });
+  }
 
   // Load Data and Render Initial Chart
   const { unemploymentData, ethanolData } = await loadData();
@@ -516,9 +534,7 @@ document.addEventListener("DOMContentLoaded", async function () {
   // Populate the "Select a Year" dropdown dynamically based on data
   const yearsUnemployment = unemploymentData.map((d) => d.year);
   const yearsEthanol = ethanolData.map((d) => d.year);
-  const allYears = Array.from(
-    new Set([...yearsUnemployment, ...yearsEthanol])
-  ).sort((a, b) => a - b);
+  const allYears = Array.from({ length: 2018 - 1977 + 1 }, (_, i) => 1977 + i);
 
   const yearSelectElem = document.getElementById("year-select");
   allYears.forEach((year) => {
@@ -538,10 +554,6 @@ document.addEventListener("DOMContentLoaded", async function () {
 
   // Initial Chart Rendering
   renderChart(stateSelect.node().value, unemploymentData, ethanolData);
-
-  // Apply Initial Zoom After Chart is Rendered
-  const initialScale = 0.7; // 70% zoomed out
-  svg.call(zoom.transform, d3.zoomIdentity.scale(initialScale));
 
   // Dispatch 'yearChanged' event to synchronize with the map
   const initialYear = +yearSelectElem.value;

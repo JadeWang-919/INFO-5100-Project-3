@@ -92,9 +92,25 @@ body {
   stroke: none;
 }
 
+.x-gridlines line {
+  stroke: #bbb;
+}
+
+.x-gridlines .domain {
+  stroke: none;
+}
+
+.y-gridlines line {
+  stroke: #bbb;
+}
+
+.y-gridlines .domain {
+  stroke: none;
+}
+
 .year-marker {
   stroke: black;
-  stroke-dasharray: 4,4;
+  stroke-dasharray: 4, 4;
 }
 
 /* Highlight for Unemployment Data Point */
