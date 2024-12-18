@@ -107,29 +107,3 @@ body {
   stroke: #ba4227;
   stroke-width: 3px;
 }
-
-/* Tooltip Styling */
-.tooltip {
-  position: absolute;
-  text-align: center;
-  padding: 6px;
-  font-size: 12px;
-  background: #333;
-  color: #fff;
-  border-radius: 4px;
-  pointer-events: none;
-  opacity: 0;
-  transition: opacity 0.2s ease-in-out;
-  z-index: 9999;
-}
-
-/* Gridlines Styling */
-.grid line {
-  stroke: #bbb;
-  stroke-opacity: 0.7;
-  shape-rendering: crispEdges;
-}
-
-.grid path {
-  stroke: none;
-}
