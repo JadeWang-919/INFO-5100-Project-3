@@ -511,6 +511,7 @@ document.addEventListener("DOMContentLoaded", async function () {
 
     // Listen for Custom 'yearChanged' Events from the Map
     window.addEventListener("yearChanged", function (e) {
+      d3.select("#reset-view-xuyuan").node().click();
       const newYear = e.detail.year;
       // Update the "year-select" dropdown value without triggering the 'change' event again
       d3.select("#year-select").property("value", newYear);
