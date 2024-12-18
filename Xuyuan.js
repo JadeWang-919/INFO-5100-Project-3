@@ -65,7 +65,8 @@ document.addEventListener("DOMContentLoaded", async function () {
   });
 
   // Initialize SVG and chart dimensions
-  const svg = d3.select("#time-series-svg")
+  const svg = d3
+    .select("#time-series-svg")
     .attr("viewBox", `0 0 1000 600`)
     .attr("preserveAspectRatio", "xMidYMid meet");
   const width = 1000;
@@ -157,7 +158,10 @@ document.addEventListener("DOMContentLoaded", async function () {
   // Function to Render Gridlines
   function renderGridlines() {
     const xGrid = d3.axisBottom(xScale).tickSize(-chartHeight).tickFormat("");
-    const yGrid = d3.axisLeft(yScaleUnemployment).tickSize(-chartWidth).tickFormat("");
+    const yGrid = d3
+      .axisLeft(yScaleUnemployment)
+      .tickSize(-chartWidth)
+      .tickFormat("");
 
     chartArea.selectAll(".x-grid").remove();
     chartArea.selectAll(".y-grid").remove();
@@ -179,7 +183,7 @@ document.addEventListener("DOMContentLoaded", async function () {
         d3.autoType
       );
       const ethanolData = await d3.csv(
-        "apparent_per_capita_alcohol_consumption_1977_2018.csv",
+        "alcohol_consumption_1977_2018.csv",
         d3.autoType
       );
       console.log("Data loaded successfully");
@@ -430,31 +434,43 @@ document.addEventListener("DOMContentLoaded", async function () {
     yAxisRightGroup.call(yAxisRight.scale(new_yScaleEthanol));
 
     // Update Gridlines with New Scales
-    const xGrid = d3.axisBottom(new_xScale).tickSize(-chartHeight).tickFormat("");
-    const yGrid = d3.axisLeft(new_yScaleUnemployment).tickSize(-chartWidth).tickFormat("");
+    const xGrid = d3
+      .axisBottom(new_xScale)
+      .tickSize(-chartHeight)
+      .tickFormat("");
+    const yGrid = d3
+      .axisLeft(new_yScaleUnemployment)
+      .tickSize(-chartWidth)
+      .tickFormat("");
 
     chartArea.select(".x-grid").call(xGrid);
     chartArea.select(".y-grid").call(yGrid);
 
     // Update Lines with New Scales
-    viewport.selectAll(".unemployment-line")
-      .attr("d", d3.line()
+    viewport.selectAll(".unemployment-line").attr(
+      "d",
+      d3
+        .line()
         .x((d) => new_xScale(d.year))
         .y((d) => new_yScaleUnemployment(d.value))
-      );
+    );
 
-    viewport.selectAll(".ethanol-line")
-      .attr("d", d3.line()
+    viewport.selectAll(".ethanol-line").attr(
+      "d",
+      d3
+        .line()
         .x((d) => new_xScale(d.year))
         .y((d) => new_yScaleEthanol(d.value))
-      );
+    );
 
     // Update Points with New Scales
-    viewport.selectAll(".unemployment-point")
+    viewport
+      .selectAll(".unemployment-point")
       .attr("cx", (d) => new_xScale(d.year))
       .attr("cy", (d) => new_yScaleUnemployment(d.value));
 
-    viewport.selectAll(".ethanol-point")
+    viewport
+      .selectAll(".ethanol-point")
       .attr("cx", (d) => new_xScale(d.year))
       .attr("cy", (d) => new_yScaleEthanol(d.value));
 
@@ -476,15 +492,15 @@ document.addEventListener("DOMContentLoaded", async function () {
     highlightYear(selectedYear);
 
     // Dispatch 'yearChanged' event to synchronize with the map
-    const yearChangeEvent = new CustomEvent('yearChanged', {
-      detail: { year: selectedYear }
+    const yearChangeEvent = new CustomEvent("yearChanged", {
+      detail: { year: selectedYear },
     });
     window.dispatchEvent(yearChangeEvent);
     console.log(`Dispatched yearChanged event for year: ${selectedYear}`);
   });
 
   // Listen for Custom 'yearChanged' Events from the Map
-  window.addEventListener('yearChanged', function (e) {
+  window.addEventListener("yearChanged", function (e) {
     const newYear = e.detail.year;
     // Update the "year-select" dropdown value without triggering the 'change' event again
     d3.select("#year-select").property("value", newYear);
@@ -498,12 +514,14 @@ document.addEventListener("DOMContentLoaded", async function () {
   d3.select("#loading-message").remove();
 
   // Populate the "Select a Year" dropdown dynamically based on data
-  const yearsUnemployment = unemploymentData.map(d => d.year);
-  const yearsEthanol = ethanolData.map(d => d.year);
-  const allYears = Array.from(new Set([...yearsUnemployment, ...yearsEthanol])).sort((a, b) => a - b);
+  const yearsUnemployment = unemploymentData.map((d) => d.year);
+  const yearsEthanol = ethanolData.map((d) => d.year);
+  const allYears = Array.from(
+    new Set([...yearsUnemployment, ...yearsEthanol])
+  ).sort((a, b) => a - b);
 
   const yearSelectElem = document.getElementById("year-select");
-  allYears.forEach(year => {
+  allYears.forEach((year) => {
     const option = document.createElement("option");
     option.value = year;
     option.textContent = year;
@@ -527,8 +545,8 @@ document.addEventListener("DOMContentLoaded", async function () {
 
   // Dispatch 'yearChanged' event to synchronize with the map
   const initialYear = +yearSelectElem.value;
-  const initialYearChangeEvent = new CustomEvent('yearChanged', {
-    detail: { year: initialYear }
+  const initialYearChangeEvent = new CustomEvent("yearChanged", {
+    detail: { year: initialYear },
   });
   window.dispatchEvent(initialYearChangeEvent);
   console.log(`Dispatched initial yearChanged event for year: ${initialYear}`);
