@@ -11,8 +11,6 @@ async function drawGraph() {
     d3.autoType
   );
 
-
-
   // Count number of Disney movies by year
   let movieCountByYear = {};
   for (let i = 0; i < disneyData.length; i++) {
@@ -139,6 +137,7 @@ async function drawGraph() {
     .select("#jade-div")
     .append("div")
     .attr("class", "arthur-tooltip")
+    .style("text-align", "left")
     .style("opacity", 0);
 
   // Set up zoom behavior
