@@ -402,7 +402,6 @@ alcLegendContainer
       detail: { year: selectedYear },
     });
     window.dispatchEvent(yearChangeEvent);
-    console.log(`Dispatched yearChanged event for year: ${selectedYear}`);
   });
 
   dataTypeDropdown.on("change", function () {
@@ -423,7 +422,6 @@ alcLegendContainer
     detail: { year: initialYear },
   });
   window.dispatchEvent(initialYearChangeEvent);
-  console.log(`Dispatched initial yearChanged event for year: ${initialYear}`);
 
   // Hide tooltip when clicking outside of any state
   d3.select("body").on("click", function (event) {

@@ -149,7 +149,6 @@ document.addEventListener("DOMContentLoaded", async function () {
         "alcohol_consumption_1977_2018.csv",
         d3.autoType
       );
-      console.log("Data loaded successfully");
       return { unemploymentData, ethanolData };
     } catch (error) {
       d3.select("#loading-message").text(
@@ -501,7 +500,6 @@ document.addEventListener("DOMContentLoaded", async function () {
         detail: { year: selectedYear },
       });
       window.dispatchEvent(yearChangeEvent);
-      console.log(`Dispatched yearChanged event for year: ${selectedYear}`);
     });
 
     // After rendering the chart, call highlightYear
@@ -525,7 +523,6 @@ document.addEventListener("DOMContentLoaded", async function () {
         currentUnemploymentData,
         currentEthanolData
       );
-      console.log(`Received yearChanged event for year: ${newYear}`);
     });
   }
 
@@ -563,7 +560,6 @@ document.addEventListener("DOMContentLoaded", async function () {
     detail: { year: initialYear },
   });
   window.dispatchEvent(initialYearChangeEvent);
-  console.log(`Dispatched initial yearChanged event for year: ${initialYear}`);
 
   // Make Chart Updateable from Arthur's Code
   window.updateStateChart = function (stateName) {
