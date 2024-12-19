@@ -83,7 +83,7 @@ document.addEventListener("DOMContentLoaded", async function () {
   // Add Chart Title
   svg
     .append("text")
-    .text("Unemployment & Ethanol Consumption Trends")
+    .text("Unemployment & Alcohol Trends By State")
     .attr("x", margin.left + chartWidth / 2)
     .attr("y", 40)
     .attr("text-anchor", "middle")
@@ -118,7 +118,7 @@ document.addEventListener("DOMContentLoaded", async function () {
     .attr("text-anchor", "middle")
     .attr("transform", "rotate(-90)")
     .style("font-weight", "bold")
-    .text("Ethanol Consumption (Gallons per Capita)");
+    .text("Alcohol Consumption (Gallon/Person)");
 
   // Define a clip path to prevent drawing outside the chart area
   svg

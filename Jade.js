@@ -11,15 +11,7 @@ async function drawGraph() {
     d3.autoType
   );
 
-  const title = svg
-    .append("text")
-    .text("Disney Movies vs Unemployment in US")
-    .attr("x", margin.left + chartWidth / 2)
-    .attr("y", 25)
-    .attr("text-anchor", "middle")
-    .style("font-size", "20px")
-    .style("font-weight", "bold")
-    .attr("class", "h3");
+
 
   // Count number of Disney movies by year
   let movieCountByYear = {};
