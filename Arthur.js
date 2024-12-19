@@ -12,7 +12,7 @@ const unemploymentColorScale = d3.scaleSequential(d3.interpolateBlues);
 const legendWidth = 20;
 const legendHeight = 200;
 
-// Create legend groups and gradient
+// Create a group inside the legend SVG for the legend content
 const legendGroup = legendSvg.append("g")
   .attr("class", "arthur-legend")
   .attr("transform", `translate(60,50)`);
@@ -26,7 +26,7 @@ const gradient = defs.append("linearGradient")
 gradient.append("stop").attr("class", "start").attr("offset", "0%");
 gradient.append("stop").attr("class", "end").attr("offset", "100%");
 
-// Legend Title
+// Legend Title (centered above the rectangle)
 legendGroup.append("text")
   .attr("class", "arthur-legend-title")
   .attr("x", legendWidth / 2)
@@ -62,7 +62,7 @@ const stripePattern = defs.append("pattern")
     .attr("width", 10)
     .attr("height", 10)
     .attr("patternUnits", "userSpaceOnUse");
-
+  
 stripePattern.append("line")
     .attr("x1", 0)
     .attr("y1", 0)
@@ -91,7 +91,7 @@ alcLegendContainer.select("svg")
       .attr("y", 22) 
       .text("High Alcohol Consumption (> 1.3 gal/person)")
       .style("font-size", "14px");
-
+    
 
 (async function loadAndVisualizeData() {
   const topoData = await d3.json("us-smaller.json");
@@ -123,21 +123,17 @@ alcLegendContainer.select("svg")
 
   const states = topojson.feature(topoData, topoData.objects.states).features;
 
-  // Ensure these elements exist before calling updateMap
   const yearSlider = d3.select("#yearSlider");
   const dataTypeDropdown = d3.select("#dataType");
   const yearLabel = d3.select("#yearLabel");
 
-  // Append state and label groups once, not on each update
-  const gStates = svg.append("g").attr("class", "states-group");
-  const gLabels = svg.append("g").attr("class", "labels-group");
-
-  // Mapping from data keys to descriptive labels
+  // Mapping from data keys to descriptive labels in the legend
   const consumptionLabels = {
     "ethanol_beer_gallons_per_capita": "Beer consumption",
     "ethanol_wine_gallons_per_capita": "Wine consumption",
     "ethanol_spirit_gallons_per_capita": "Spirit consumption"
   };
+
 
   function updateMap(selectedYear, selectedType) {
     // Filter unemployment data by year
@@ -146,62 +142,86 @@ alcLegendContainer.select("svg")
       yearData.map(d => [d.state.toLowerCase(), d["Unemployed - Percent of Labor Force"]])
     );
 
+    // Compute min and max unemployment for this year
     const values = Object.values(unemploymentByState).filter(v => v != null);
     const [minVal, maxVal] = d3.extent(values);
+
+    // Handle cases where no data is available
     const actualMin = (minVal !== undefined) ? minVal : 0;
     const actualMax = (maxVal !== undefined) ? maxVal : 0;
+
+    // Update color scale domain based on this year's data
     unemploymentColorScale.domain([actualMin, actualMax]);
 
-    const stateSelection = gStates.selectAll(".arthur-state")
-      .data(states, d => d.id);
+    const gStates = svg.selectAll(".states-group").data([null]);
+    gStates.enter().append("g").attr("class", "states-group");
+    const gLabels = svg.selectAll(".labels-group").data([null]);
+    gLabels.enter().append("g").attr("class", "labels-group");
 
-    const stateEnter = stateSelection.enter()
-      .append("g")
-      .attr("class", "arthur-state");
+    gStates.selectAll(".arthur-state")
+    .data(states)
+    .join("g")
+    .attr("class", "arthur-state")
+    .each(function (d) {
+      const stateName = stateIdToName[d.id]?.toLowerCase();
 
-    stateEnter.merge(stateSelection)
-      .each(function(d) {
-        const stateName = stateIdToName[d.id]?.toLowerCase();
-        const unemployment = unemploymentByState[stateName];
-        const alcohol = alcoholData.find(
-          record => record.state.toLowerCase() === stateName && record.year === selectedYear
-        )?.[selectedType];
+      const unemployment = unemploymentByState[stateName];
+      const alcohol = alcoholData.find(
+        record => record.state.toLowerCase() === stateName && record.year === selectedYear
+      )?.[selectedType];
 
-        const unemploymentColor = unemploymentColorScale(unemployment || 0);
+      const unemploymentColor = unemploymentColorScale(unemployment || 0);
 
-        const stateGroup = d3.select(this);
+      const stateGroup = d3.select(this);
 
-        // Clean old paths
-        stateGroup.selectAll("path.state-base").remove();
-        stateGroup.selectAll("path.state-pattern").remove();
+      // Remove existing paths to prevent duplicates
+      stateGroup.selectAll("path.state-base").remove();
+      stateGroup.selectAll("path.state-pattern").remove();
 
+      stateGroup.append("path")
+        .attr("class", "state-base")
+        .attr("d", path(d))
+        .style("fill", unemploymentColor);
+      
+      if (alcohol > threshold) {
         stateGroup.append("path")
-          .attr("class", "state-base")
+          .attr("class", "state-pattern")
           .attr("d", path(d))
-          .style("fill", unemploymentColor);
+          .style("fill", "url(#stripe-pattern)");
+      }
+    })
+   
+    // Add click event listener
+    .on("click", (event, d) => {
+      event.stopPropagation(); // Prevent body click from hiding the tooltip
+      const stateName = stateIdToName[d.id];
+      if (!stateName) return;
 
-        if (alcohol > threshold) {
-          stateGroup.append("path")
-            .attr("class", "state-pattern")
-            .attr("d", path(d))
-            .style("fill", "url(#stripe-pattern)");
-        }
-      })
-      .on("mouseover", (event, d) => {
-        const stateName = stateIdToName[d.id];
-        if (!stateName) return;
-
-        const alcoholInfo = alcoholData.find(
-          record => record.state.toLowerCase() === stateName.toLowerCase() && record.year === selectedYear
-        );
-
+      const stateNameLower = stateName.toLowerCase();
+      
+      // Toggle selection
+      const isSelected = d3.select(event.currentTarget).classed("selected");
+      
+      // Deselect all states
+      svg.selectAll(".arthur-state").classed("selected", false)
+         .selectAll("path.state-base")
+         .style("stroke", "#ffffff")
+         .style("stroke-width", "1px");
+      
+      if (!isSelected) {
+        // Select the clicked state
         d3.select(event.currentTarget)
-          .raise()
+          .classed("selected", true)
+          .selectAll("path.state-base")
           .style("stroke", "black")
-          .style("stroke-width", "1px");
+          .style("stroke-width", "2px");
 
-        const unemploymentRate = unemploymentByState[stateName.toLowerCase()];
-        const selectedConsumptionLabel = consumptionLabels[selectedType] || "Consumption";
+        // Show tooltip
+        const unemploymentRate = unemploymentByState[stateNameLower];
+        const alcoholInfo = alcoholData.find(
+          record => record.state.toLowerCase() === stateNameLower && record.year === selectedYear
+        );
+        const selectedConsumptionLabel = consumptionLabels[selectedType];
         const selectedValue = alcoholInfo ? alcoholInfo[selectedType] : "No data";
         const formattedValue = (selectedValue !== "No data") ? selectedValue.toFixed(3) + " gallons per person" : "No data";
 
@@ -211,64 +231,53 @@ alcLegendContainer.select("svg")
             <strong>${stateName}</strong><br>
             Unemployment Rate: ${unemploymentRate != null ? unemploymentRate.toFixed(1) + '%' : 'No data'}<br>
             ${selectedConsumptionLabel}: ${formattedValue}
-          `);
-
-        // If window.updateStateChart is defined, call it
-        if (window.updateStateChart) {
-          window.updateStateChart(stateName.toLowerCase());
-        }
-
-        const formattedStateValue = stateName.toLowerCase().replace(/ /g, "_");
-        d3.select('#state-select').property("value", formattedStateValue);
-      })
-      .on("mousemove", event => {
-        tooltip
+          `)
           .style("top", (event.pageY + 10) + "px")
           .style("left", (event.pageX + 10) + "px");
-      })
-      .on("mouseout", event => {
-        d3.select(event.currentTarget)
-          .style("stroke", "#ffffff")
-          .style("stroke-width", "1px");
+
+        // Update the chart with the selected state
+        window.updateStateChart(stateNameLower);
+
+        // Update state selection dropdown
+        const formattedStateValue = stateNameLower.replace(/ /g, "_");
+        d3.select('#state-select').property("value", formattedStateValue);
+      } else {
+        // Hide tooltip if the state is already selected
         tooltip.style("visibility", "hidden");
-      });
-
-    stateSelection.exit().remove();
-
-    // Update labels
-    const labelSelection = gLabels.selectAll(".state-code")
-      .data(states, d => d.id);
-
-    labelSelection.enter()
-      .append("text")
-      .attr("class", "state-code")
-      .merge(labelSelection)
-      .attr("x", d => {
-        const centroid = path.centroid(d);
-        return centroid && !isNaN(centroid[0]) ? centroid[0] : 0;
-      })
-      .attr("y", d => {
-        const centroid = path.centroid(d);
-        return centroid && !isNaN(centroid[1]) ? centroid[1] : 0;
-      })
-      .attr("text-anchor", "middle")
-      .attr("dy", "0.35em")
-      .text(d => {
-        const stateName = stateIdToName[d.id]?.toLowerCase();
-        if (stateName === "district of columbia") {
-          return "";
-        }
-        return stateLookup[stateName] || "";
-      })
-      .style("font-size", "10px")
-      .style("fill", "black");
-
-    labelSelection.exit().remove();
+      }
+    });
 
     updateLegend(actualMin, actualMax);
+
+    // Add state codes for easier recognition
+    gLabels.selectAll(".state-code")
+    .data(states)
+    .join("text")
+    .attr("class", "state-code")
+    .attr("x", d => {
+      const centroid = path.centroid(d);
+      return centroid && !isNaN(centroid[0]) ? centroid[0] : 0;
+    })
+    .attr("y", d => {
+      const centroid = path.centroid(d);
+      return centroid && !isNaN(centroid[1]) ? centroid[1] : 0;
+    })
+    .attr("text-anchor", "middle")
+    .attr("dy", "0.35em")
+    .text(d => {
+      const stateName = stateIdToName[d.id]?.toLowerCase();
+      if (stateName === "district of columbia") {
+        return "";
+      }
+      return stateLookup[stateName] || "";
+    })
+    .style("font-size", "10px")
+    .style("fill", "black");
   }
 
+
   function updateLegend(minVal, maxVal) {
+    // Update gradient stops
     gradient.select(".start")
       .attr("stop-color", unemploymentColorScale(maxVal));
 
@@ -277,6 +286,7 @@ alcLegendContainer.select("svg")
 
     legendRect.style("fill", "url(#legend-gradient)");
 
+    // Legend scale and axis
     const legendScale = d3.scaleLinear()
       .domain([minVal, maxVal])
       .range([legendHeight, 0]);
@@ -293,6 +303,7 @@ alcLegendContainer.select("svg")
     yearLabel.text(this.value);
     updateMap(selectedYear, dataTypeDropdown.property("value"));
 
+    // Dispatch a custom 'yearChanged' event with the new year
     const yearChangeEvent = new CustomEvent('yearChanged', {
       detail: { year: selectedYear }
     });
@@ -305,16 +316,29 @@ alcLegendContainer.select("svg")
     updateMap(selectedYear, this.value);
   });
 
-  // Initial render with default dropdown and slider values
-  const initialYear = +yearSlider.property("value");
-  const initialType = dataTypeDropdown.property("value");
-  updateMap(initialYear, initialType);
+  // Initial render
+  updateMap(+yearSlider.property("value"), dataTypeDropdown.property("value"));
 
-  // Dispatch the 'yearChanged' event after initial render
+  const initialYear = +yearSlider.property("value");
   const initialYearChangeEvent = new CustomEvent('yearChanged', {
     detail: { year: initialYear }
   });
   window.dispatchEvent(initialYearChangeEvent);
   console.log(`Dispatched initial yearChanged event for year: ${initialYear}`);
+
+  // Hide tooltip when clicking outside of any state
+  d3.select("body").on("click", function(event) {
+    const isState = event.target.closest(".arthur-state");
+    if (!isState) {
+      // Deselect all states
+      svg.selectAll(".arthur-state").classed("selected", false)
+         .selectAll("path.state-base")
+         .style("stroke", "#ffffff")
+         .style("stroke-width", "1px");
+
+      // Hide tooltip
+      tooltip.style("visibility", "hidden");
+    }
+  });
 
 })();
