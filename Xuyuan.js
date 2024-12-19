@@ -177,6 +177,7 @@ document.addEventListener("DOMContentLoaded", async function () {
 
   // Function to Render the Chart
   function renderChart(stateName, unemploymentData, ethanolData) {
+    stateName = stateName.replace(/_/g, " ");
     // Clear Previous Chart Elements
     viewport.selectAll(".line").remove();
     viewport.selectAll(".point").remove();
