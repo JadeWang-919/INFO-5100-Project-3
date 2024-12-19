@@ -319,7 +319,12 @@ alcLegendContainer.select("svg")
   // Initial render
   updateMap(+yearSlider.property("value"), dataTypeDropdown.property("value"));
 
+  // Initial render with default dropdown and slider values
   const initialYear = +yearSlider.property("value");
+  const initialType = dataTypeDropdown.property("value");
+  updateMap(initialYear, initialType);
+  
+  // Dispatch the 'yearChanged' event after initial render
   const initialYearChangeEvent = new CustomEvent('yearChanged', {
     detail: { year: initialYear }
   });
